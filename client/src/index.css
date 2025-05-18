@@ -28,6 +28,9 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
 }
 
 h1 {
@@ -65,4 +68,19 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+table {
+  width: 100%;
+}
+
+td {
+  width: 15rem;
+  padding: 1rem;
+  background-color: white;
+  color: black;
+}
+
+th {
+  background-color: #535bf2;
 }
