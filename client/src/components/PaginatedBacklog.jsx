@@ -57,22 +57,22 @@ const PaginatedBacklog = () => {
   const backlogTasks = tasks.filter((task) => task?.taskStatus?.name === "backlog");
 
   return (
-    <div>
-      <h2>Backlog Tasks</h2>
+    <div className="backlog-container">
+      <h2 className="backlog-header">Backlog Tasks</h2>
 
       {backlogTasks.length === 0 ? (
-        <p>No backlog tasks found.</p>
+        <p className="no-tasks-message">No backlog tasks found.</p>
       ) : (
-        <table>
+        <table className="backlog-table">
           <thead>
             <tr>
-              <th>Title</th>
+              <th className="table-header">Title</th>
             </tr>
           </thead>
           <tbody>
             {backlogTasks.map((task) => (
-              <tr key={task.id}>
-                <td className="taskTitle">{task.title}</td>
+              <tr key={task.id} className="task-row">
+                <td className="task-title">{task.title}</td>
               </tr>
             ))}
           </tbody>
