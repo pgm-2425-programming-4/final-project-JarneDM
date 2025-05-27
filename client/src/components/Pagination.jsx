@@ -3,7 +3,7 @@ import React from "react";
 const Pagination = ({ page, totalPages, onPageChange }) => {
   return (
     <div style={{ marginTop: "1rem" }}>
-      <button onClick={() => onPageChange(page - 1)} disabled={page === 1} aria-label="Previous page">
+      <button className="button" onClick={() => onPageChange(page - 1)} disabled={page === 1} aria-label="Previous page">
         Previous
       </button>
 
@@ -11,7 +11,7 @@ const Pagination = ({ page, totalPages, onPageChange }) => {
         Page {page} of {totalPages}
       </span>
 
-      <button onClick={() => onPageChange(page + 1)} disabled={page === totalPages} aria-label="Next page">
+      <button className="button" onClick={() => onPageChange(page + 1)} disabled={page === totalPages} aria-label="Next page">
         Next
       </button>
     </div>
