@@ -1,0 +1,45 @@
+.projects-container {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  position: absolute;
+  margin-top: 0.5rem;
+  top: 0%;
+  min-height: 50vh;
+  width: min-content;
+}
+
+.projects-sidebar {
+  width: 250px;
+  padding: 20px;
+  background-color: #e5e4e4;
+  border-right: 2px solid #258bff;
+  border-radius: 10px;
+}
+
+.projects-title {
+  font-size: 1.2rem;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.projects-list p {
+  margin: 8px 0;
+  padding: 5px;
+  cursor: pointer;
+  border-bottom: 1px solid #419aff;
+}
+
+.projects-list p:hover {
+  background-color: #419aff;
+}
+
+@media (max-width: 768px) {
+  .projects-container {
+    flex-direction: column;
+  }
+  .projects-sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #ddd;
+  }
+}

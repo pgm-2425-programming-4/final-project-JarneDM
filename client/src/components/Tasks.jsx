@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import Pagination from "./Pagination";
-import "./Backlog.css";
 
-const PaginatedBacklog = () => {
+import Pagination from "./Pagination";
+
+function Tasks({ selectedProject }) {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -55,34 +55,40 @@ const PaginatedBacklog = () => {
     return <div>Error: {error}</div>;
   }
 
-  const backlogTasks = tasks.filter((task) => task?.taskStatus?.name === "Backlog");
+  const projectTasks = tasks.filter((task) => task.project?.name === selectedProject && task.taskStatus.name !== "Backlog");
 
   return (
-    <div className="backlog-container">
-      <h2 className="backlog-header">Backlog Tasks</h2>
+    <>
+      <div className="backlog-container">
+        <h2 className="backlog-header">{selectedProject ? `Task List for ${selectedProject}` : "Select a Project"}</h2>
 
-      {backlogTasks.length === 0 ? (
-        <p className="no-tasks-message">No backlog tasks found.</p>
-      ) : (
-        <table className="backlog-table">
-          <thead>
-            <tr>
-              <th className="table-header">Title</th>
-            </tr>
-          </thead>
-          <tbody>
-            {backlogTasks.map((task) => (
-              <tr key={task.id} className="task-row">
-                <td className="task-title">{task.title}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+        {selectedProject ? (
+          projectTasks.length === 0 ? (
+            <p className="no-tasks-message">No tasks found for this project.</p>
+          ) : (
+            <table className="backlog-table">
+              <thead>
+                <tr>
+                  <th className="table-header">Title</th>
+                </tr>
+              </thead>
+              <tbody>
+                {projectTasks.map((task) => (
+                  <tr key={task.id} className="task-row">
+                    <td className="task-title">{task.title}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )
+        ) : (
+          <p className="no-tasks-message">Please select a project</p>
+        )}
 
-      <Pagination page={pagination.page} totalPages={Math.ceil(pagination.total / pagination.pageSize)} onPageChange={handlePageChange} />
-    </div>
+        <Pagination page={pagination.page} totalPages={Math.ceil(pagination.total / pagination.pageSize)} onPageChange={handlePageChange} />
+      </div>
+    </>
   );
-};
+}
 
-export default PaginatedBacklog;
+export default Tasks;
