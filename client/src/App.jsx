@@ -1,8 +1,9 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import PaginatedBacklog from "./components/PaginatedBacklog";
-import Projects from "./components/Projects";
 import { useState } from "react";
 import Tasks from "./components/Tasks";
+import SideBar from "./components/SideBar";
+import TopBar from "./components/TopBar";
 
 const queryClient = new QueryClient();
 
@@ -12,8 +13,9 @@ function App() {
     <>
       <QueryClientProvider client={queryClient}>
         {/* <PaginatedBacklog /> */}
+        <TopBar />
         <Tasks selectedProject={selectedProject} />
-        <Projects selectedProject={selectedProject} onSelectProject={setSelectedProject} />
+        <SideBar selectedProject={selectedProject} onSelectProject={setSelectedProject} />
       </QueryClientProvider>
     </>
   );

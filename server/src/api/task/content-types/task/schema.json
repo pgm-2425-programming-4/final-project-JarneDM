@@ -25,6 +25,18 @@
       "relation": "manyToOne",
       "target": "api::project.project",
       "inversedBy": "tasks"
+    },
+    "category": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::categorie.categorie",
+      "inversedBy": "tasks"
+    },
+    "labels": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::label.label",
+      "mappedBy": "tasks"
     }
   }
 }

@@ -3,7 +3,7 @@
   display: flex;
   position: absolute;
   margin-top: 0.5rem;
-  top: 0%;
+  top: 20%;
   min-height: 50vh;
   width: min-content;
 }

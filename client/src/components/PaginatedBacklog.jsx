@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Pagination from "./Pagination";
-import "./Backlog.css";
+import "./css/Backlog.css";
 
 const PaginatedBacklog = () => {
   const [tasks, setTasks] = useState([]);

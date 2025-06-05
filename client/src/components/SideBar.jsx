@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import "./Projects.css";
+import "./css/Projects.css";
 
-function Projects({ selectedProject, onSelectProject }) {
+function SideBar({ selectedProject, onSelectProject }) {
   const [projects, setProjects] = useState([]);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -34,6 +34,8 @@ function Projects({ selectedProject, onSelectProject }) {
   return (
     <div className="projects-container">
       <div className="projects-sidebar">
+        <a href="">HOME</a>
+        {/* BREAKLINE */}
         <h3 className="projects-title">PROJECTS</h3>
         <div className="projects-list">
           {projects.map((project) => (
@@ -51,4 +53,4 @@ function Projects({ selectedProject, onSelectProject }) {
   );
 }
 
-export default Projects;
+export default SideBar;

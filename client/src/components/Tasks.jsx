@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import "./css/Tasks.css";
 
 import Pagination from "./Pagination";
 
@@ -17,7 +18,7 @@ function Tasks({ selectedProject }) {
       try {
         setLoading(true);
         const res = await fetch(
-          `http://localhost:1337/api/tasks?populate[project]=true&populate[taskStatus]=true&pagination[page]=${page}&pagination[pageSize]=${pagination.pageSize}`
+          `http://localhost:1337/api/tasks?populate[project]=true&populate[taskStatus]=true&populate[labels]=true&pagination[page]=${page}&pagination[pageSize]=${pagination.pageSize}`
         );
         const data = await res.json();
 
@@ -75,7 +76,18 @@ function Tasks({ selectedProject }) {
               <tbody>
                 {projectTasks.map((task) => (
                   <tr key={task.id} className="task-row">
-                    <td className="task-title">{task.title}</td>
+                    <td className="task-title">
+                      {task.title}
+                      {task.labels?.length > 0 && (
+                        <span className="task-labels">
+                          {task.labels.map((label) => (
+                            <span key={label.id} className="label">
+                              {label.name}
+                            </span>
+                          ))}
+                        </span>
+                      )}
+                    </td>
                   </tr>
                 ))}
               </tbody>
