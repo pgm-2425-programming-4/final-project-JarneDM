@@ -1,13 +1,28 @@
-.statusTitle {
-  margin: 0 auto;
-  font-size: 10rem;
+.status-container {
+  width: 100%;
+  justify-content: space-between;
   display: flex;
+  padding: 0;
+  margin: 0 auto;
+}
+
+.status-card {
+  display: flex;
+  margin: 0 3rem 1rem 3rem;
+  border: 2px solid #288dff;
+  background-color: #e5e4e4;
+  color: #333333;
+  height: 2.5rem;
+  width: 10rem;
+  border-radius: 10px;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  font-weight: 700;
 }
 
 .task-title {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
 }
 
 .task-labels {
