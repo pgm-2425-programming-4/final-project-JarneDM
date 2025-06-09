@@ -1,22 +1,40 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 function TopBar() {
   const [categories, setCategories] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState(null);
 
-  const fetchTasks = async () => {
-    try {
-      const res = await fetch(`http://localhost:1337/api/categories?populate[tasks]=true`);
-      const data = await res.json();
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        setLoading(true);
+        const res = await fetch(`http://localhost:1337/api/categories?populate[tasks]=true`);
+        const data = await res.json();
 
-      if (data?.data) {
-        setCategories(data.data);
+        if (data?.data) {
+          setCategories(data.data);
+        } else {
+          setError("Unexpected data format");
+        }
+      } catch (err) {
+        console.error("Failed to fetch tasks:", err);
+        setError("Failed to fetch categories");
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      console.error("Failed to fetch tasks:", err);
-    }
-  };
+    };
 
-  fetchTasks();
+    fetchTasks();
+  }, []);
+
+  if (loading) {
+    return <div>Loading categories...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
   return (
     <>
       <nav>
