@@ -15,10 +15,18 @@
   height: 2.5rem;
   width: 10rem;
   border-radius: 10px;
+  border: 1px solid black;
   align-items: center;
   text-align: center;
   justify-content: center;
   font-weight: 700;
+}
+
+.status-column {
+  border: 1px solid black;
+  padding: 0 1rem 0.5rem 1rem;
+  border-radius: 10px;
+  width: 11rem;
 }
 
 .task-title {
@@ -36,4 +44,14 @@
   width: min-content;
   border-radius: 10px;
   font-size: 14px;
+}
+
+.task-card {
+  background-color: #288dff;
+  color: white;
+  height: 4rem;
+  width: 10rem;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  border-radius: 10px;
 }
