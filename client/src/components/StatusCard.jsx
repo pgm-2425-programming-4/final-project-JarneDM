@@ -1,52 +1,83 @@
 import React, { useState, useEffect } from "react";
 import "./css/Tasks.css";
 
-function StatusCard() {
-  const [status, setStatus] = useState([]);
+function StatusCard({ selectedProject }) {
+  const [tasks, setTasks] = useState([]);
+  const [statuses, setStatuses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // http://localhost:1337/api/statuses?populate[tasks]=true
-
   useEffect(() => {
-    const fetchStatuses = async () => {
+    const fetchData = async () => {
       try {
         setLoading(true);
-        const res = await fetch(`http://localhost:1337/api/statuses?populate[tasks]=true`);
-        const data = await res.json();
 
-        if (data?.data) {
-          setStatus(data.data);
+        const taskRes = await fetch("http://localhost:1337/api/tasks?populate=*");
+        const taskData = await taskRes.json();
+
+        const statRes = await fetch("http://localhost:1337/api/statuses");
+        const statData = await statRes.json();
+
+        if (taskData?.data && statData?.data) {
+          setTasks(taskData.data);
+          setStatuses(statData.data);
         } else {
           setError("Unexpected data format");
         }
       } catch (err) {
-        console.error("Failed to fetch tasks:", err);
-        setError("Failed to fetch tasks");
+        setError("Failed to fetch data: " + err.message);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchStatuses();
-  }, []);
-  if (loading) {
-    return <div>Loading task statuses...</div>;
-  }
+    fetchData();
+  }, [selectedProject]);
 
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
+  if (loading) return <div>Loading task statuses...</div>;
+  if (error) return <div>Error: {error}</div>;
+
+  const filteredTasks = selectedProject
+    ? tasks.filter((task) => {
+        return task.project?.name && task.project.name.toLowerCase() === selectedProject.toLowerCase();
+      })
+    : tasks;
+
+  console.log("Raw tasks:", tasks);
+  console.log("Raw statuses:", statuses);
+  console.log("Filtered tasks:", filteredTasks);
 
   return (
-    <div className="status-container">
-      {status?.map((stat) => (
-        <div key={stat.id} className="status-card">
-          <div className="status__title" key={stat.id}>
-            {stat.name || " No status"}
-          </div>
-        </div>
-      ))}
+    <div className="container">
+      <div className="status-container">
+        {statuses.map((status) => {
+          const statusName = status.attributes?.name || status.name;
+
+          const statusTasks = filteredTasks.filter((task) => {
+            const taskStatusName = task.attributes?.taskStatus?.data?.attributes?.name || task.taskStatus?.name;
+            console.log("Task title:", task.attributes?.title || task.title);
+            console.log("Task status name:", taskStatusName, "vs", statusName);
+            return taskStatusName === statusName;
+          });
+
+          return (
+            <div key={status.id} className="status-column">
+              <h3>{statusName}</h3>
+              <div className="task-cards">
+                {statusTasks.length === 0 ? (
+                  <div className="no-tasks">No tasks</div>
+                ) : (
+                  statusTasks.map((task) => (
+                    <div key={task.id} className="task-card">
+                      {task.attributes?.title || task.title}
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }

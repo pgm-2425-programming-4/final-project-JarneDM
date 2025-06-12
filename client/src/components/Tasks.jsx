@@ -3,7 +3,7 @@ import "./css/Tasks.css";
 import Pagination from "./Pagination";
 import StatusCard from "./StatusCard";
 
-function Tasks({ selectedProject }) {
+function Tasks({ selectedProject, projectId }) {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -18,7 +18,7 @@ function Tasks({ selectedProject }) {
     const fetchTasks = async () => {
       try {
         setLoading(true);
-        const res = await fetch(`http://localhost:1337/api/tasks?populate[project]=true&populate[taskStatus]=true&populate[labels]=true`);
+        const res = await fetch(`http://localhost:1337/api/tasks?populate=*`);
         const data = await res.json();
 
         if (data?.data) {
@@ -67,7 +67,7 @@ function Tasks({ selectedProject }) {
         projectTasks.length === 0 ? (
           <p className="no-tasks-message">No tasks found for this project.</p>
         ) : (
-          <StatusCard tasks={projectTasks} loading={loading} error={error} />
+          <StatusCard selectedProject={selectedProject} tasks={projectTasks} projectId={projectId} loading={loading} error={error} />
         )
       ) : (
         <p className="no-tasks-message">Please select a project</p>

@@ -1,12 +1,12 @@
 .status-container {
-  width: 100%;
+  width: 60rem;
   justify-content: space-between;
   display: flex;
   padding: 0;
   margin: 0 auto;
 }
 
-.status-card {
+.status-row {
   display: flex;
   margin: 0 3rem 1rem 3rem;
   border: 2px solid #288dff;

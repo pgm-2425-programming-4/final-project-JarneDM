@@ -35,7 +35,6 @@ function SideBar({ selectedProject, onSelectProject }) {
     <div className="projects-container">
       <div className="projects-sidebar">
         <a href="">HOME</a>
-        {/* BREAKLINE */}
         <h3 className="projects-title">PROJECTS</h3>
         <div className="projects-list">
           {projects.map((project) => (

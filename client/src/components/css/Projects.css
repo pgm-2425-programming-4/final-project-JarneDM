@@ -3,13 +3,13 @@
   display: flex;
   position: absolute;
   margin-top: 0.5rem;
-  top: 20%;
+  top: 30%;
   min-height: 50vh;
   width: min-content;
 }
 
 .projects-sidebar {
-  width: 250px;
+  width: 200px;
   padding: 20px;
   background-color: #e5e4e4;
   border-right: 2px solid #258bff;
