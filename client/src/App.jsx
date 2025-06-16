@@ -1,23 +1,47 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import PaginatedBacklog from "./components/PaginatedBacklog";
-import { useState } from "react";
-import Tasks from "./components/Tasks";
+import { RouterProvider, createRouter, createRoute, createRootRoute, Outlet } from "@tanstack/react-router";
 import SideBar from "./components/SideBar";
-import TopBar from "./components/TopBar";
+import About from "./components/About";
+import { ProjectBoard, ProjectBacklog } from "./components/ProjectRoutes";
+
+const rootRoute = createRootRoute({
+  component: () => (
+    <>
+      <SideBar />
+      <Outlet />
+    </>
+  ),
+});
+
+const aboutRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/about",
+  component: About,
+});
+
+const projectBoardRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/projects/$id",
+  component: ProjectBoard,
+});
+
+const projectBacklogRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/projects/$id/backlog",
+  component: ProjectBacklog,
+});
+
+const router = createRouter({
+  routeTree: rootRoute.addChildren([aboutRoute, projectBoardRoute, projectBacklogRoute]),
+});
 
 const queryClient = new QueryClient();
 
 function App() {
-  const [selectedProject, setSelectedProject] = useState(null);
   return (
-    <>
-      <QueryClientProvider client={queryClient}>
-        {/* <PaginatedBacklog /> */}
-        <TopBar />
-        <Tasks selectedProject={selectedProject} />
-        <SideBar selectedProject={selectedProject} onSelectProject={setSelectedProject} />
-      </QueryClientProvider>
-    </>
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
   );
 }
 

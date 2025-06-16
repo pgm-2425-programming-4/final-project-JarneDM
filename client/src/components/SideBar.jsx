@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./css/Projects.css";
 
-function SideBar({ selectedProject, onSelectProject }) {
+function SideBar() {
   const [projects, setProjects] = useState([]);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -34,17 +34,16 @@ function SideBar({ selectedProject, onSelectProject }) {
   return (
     <div className="projects-container">
       <div className="projects-sidebar">
-        <a href="">HOME</a>
+        <a href="/about">ABOUT</a>
         <h3 className="projects-title">PROJECTS</h3>
         <div className="projects-list">
           {projects.map((project) => (
-            <p
-              key={project.id}
-              className={`project-name ${selectedProject === project.name ? "active" : ""}`}
-              onClick={() => onSelectProject(project.name)}
-            >
-              {project.name}
-            </p>
+            <div key={project.id}>
+              <a href={`/projects/${project.name}`}>{project.name}</a>
+              <a href={`/projects/${project.name}/backlog`} style={{ marginLeft: 8, fontSize: "0.9em" }}>
+                Backlog
+              </a>
+            </div>
           ))}
         </div>
       </div>

@@ -69,7 +69,10 @@ function StatusCard({ selectedProject }) {
                 ) : (
                   statusTasks.map((task) => (
                     <div key={task.id} className="task-card">
-                      {task.attributes?.title || task.title}
+                      {(() => {
+                        const title = task.attributes?.title || task.title;
+                        return title.length > 20 ? title.slice(0, 20) + "..." : title;
+                      })()}
                     </div>
                   ))
                 )}
