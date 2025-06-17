@@ -68,12 +68,14 @@ const PaginatedBacklog = () => {
           <thead>
             <tr>
               <th className="table-header">Title</th>
+              <th className="table-header">Project</th>
             </tr>
           </thead>
           <tbody>
             {backlogTasks.map((task) => (
               <tr key={task.id} className="task-row">
                 <td className="task-title">{task.title}</td>
+                <td className="task-project">{task.project.name}</td>
               </tr>
             ))}
           </tbody>

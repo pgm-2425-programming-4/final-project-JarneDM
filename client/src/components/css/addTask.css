@@ -1,0 +1,96 @@
+.hidden {
+  display: none;
+}
+
+.overlay {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40rem;
+  max-width: 90%;
+  height: auto;
+  padding: 2rem;
+  background-color: rgb(52, 167, 255);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  opacity: 0.95;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.task-title,
+.status,
+.project,
+.labels {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+}
+
+.task-title__label,
+.status__label,
+.project__label,
+.labels__label {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: white;
+}
+
+.task-title__input {
+  width: 97%;
+  padding: 0.5rem;
+  border-radius: 5px;
+  border: none;
+  font-size: 1rem;
+  background-color: white;
+}
+
+.status__drop,
+.project__drop,
+.labels__drop {
+  padding: 0.5rem;
+  border-radius: 5px;
+  border: none;
+  font-size: 1rem;
+  background-color: white;
+  width: 100%;
+  margin: 0;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+
+.btn {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  background-color: #004e98;
+  color: white;
+  transition: background-color 0.2s ease;
+  width: 10rem;
+}
+
+.add-task-btn:hover,
+button[type="button"]:hover {
+  background-color: #003f7d;
+}
+
+form > div[style*="color: red"] {
+  font-weight: bold;
+}

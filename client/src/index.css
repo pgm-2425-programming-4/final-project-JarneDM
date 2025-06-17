@@ -8,4 +8,8 @@
   align-items: center;
 } */
 
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
 /* CSS BREAKS IF I UMCOMMENT THIS CODE */
