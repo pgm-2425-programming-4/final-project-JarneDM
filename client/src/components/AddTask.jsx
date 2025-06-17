@@ -1,8 +1,7 @@
 import React, { useEffect } from "react";
 import "./css/addTask.css";
 
-function AddTask({ show, onClose }) {
-  const [tasks, setTasks] = React.useState([]);
+function AddTask({ show, onClose, onTaskAdded }) {
   const [newTask, setNewTask] = React.useState({
     title: "",
     taskStatus: "",
@@ -13,30 +12,9 @@ function AddTask({ show, onClose }) {
   const [projects, setProjects] = React.useState([]);
   const [labels, setLabels] = React.useState([]);
   const [error, setError] = React.useState(null);
-  const [loading, setLoading] = React.useState(true);
 
-  useEffect(() => {
-    const fetchTasks = async () => {
-      try {
-        setLoading(true);
-        const res = await fetch(`http://localhost:1337/api/tasks?populate=*`);
-        const data = await res.json();
-
-        if (data?.data) {
-          setTasks(data.data);
-        } else {
-          setError("Unexpected data format");
-        }
-      } catch (err) {
-        console.error("Failed to fetch tasks:", err);
-        setError("Failed to fetch tasks");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchTasks();
-  }, []);
+  const [dropdownLoading, setDropdownLoading] = React.useState(true);
+  const [submitting, setSubmitting] = React.useState(false);
 
   useEffect(() => {
     const fetchDropdownData = async () => {
@@ -52,6 +30,8 @@ function AddTask({ show, onClose }) {
         setLabels(labelsData?.data || []);
       } catch (err) {
         setError("Failed to fetch dropdown data", err);
+      } finally {
+        setDropdownLoading(false);
       }
     };
     fetchDropdownData();
@@ -79,7 +59,7 @@ function AddTask({ show, onClose }) {
 
   const addTask = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    setSubmitting(true);
     setError(null);
     try {
       const payload = {
@@ -89,32 +69,33 @@ function AddTask({ show, onClose }) {
         labels: newTask.labels.map((id) => ({ id: Number(id) })),
       };
 
-      const response = await fetch("http://localhost:1337/api/tasks", {
+      const response = await fetch("http://localhost:1337/api/tasks?populate=*", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ data: payload }),
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to add task");
-      }
+      if (!response.ok) throw new Error("Failed to add task");
 
+      const result = await response.json();
+      const createdTask = result.data;
+
+      onTaskAdded(createdTask);
       setNewTask({ title: "", taskStatus: "", project: "", labels: [] });
-      setLoading(false);
-      console.log(tasks);
       if (onClose) onClose();
-      location.reload();
     } catch (err) {
       setError("Failed to add task");
       console.error("Error adding task:", err);
-      setLoading(false);
+    } finally {
+      setSubmitting(false);
     }
   };
 
-  if (loading) {
+  if (dropdownLoading) {
     return <div>Loading tasks...</div>;
+  }
+  if (submitting) {
+    return <div>Submitting tasks...</div>;
   }
 
   if (error) {
@@ -183,7 +164,7 @@ function AddTask({ show, onClose }) {
           </div>
 
           <div className="buttons">
-            <button className="add-task-btn btn" type="submit" disabled={loading}>
+            <button className="add-task-btn btn" type="submit" disabled={submitting}>
               Add
             </button>
             <button className="btn" type="button" onClick={onClose} style={{ marginLeft: 8 }}>
