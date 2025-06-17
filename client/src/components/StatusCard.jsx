@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "@tanstack/react-router";
 import "./css/Tasks.css";
 
 function StatusCard({ selectedProject, tasks }) {
@@ -51,21 +52,27 @@ function StatusCard({ selectedProject, tasks }) {
                   <div className="no-tasks">No tasks</div>
                 ) : (
                   statusTasks.map((task) => (
-                    <div key={task.id} className="task-card">
-                      {(() => {
-                        const title = task.attributes?.title || task.title;
-                        return title.length > 20 ? title.slice(0, 20) + "..." : title;
-                      })()}
-                      {task.labels?.length > 0 ? (
-                        <div className="task-labels">
-                          {task.labels?.map((label) => (
-                            <span key={label.id} className={`label ${label.name.toLowerCase()}`}>
-                              {label.name}
-                            </span>
-                          ))}
-                        </div>
-                      ) : null}
-                    </div>
+                    <Link
+                      key={task.id}
+                      to={`/projects/${selectedProject}/tasks/${task.documentId || task.attributes?.documentId}`}
+                      style={{ textDecoration: "none", color: "inherit" }}
+                    >
+                      <div className="task-card">
+                        {(() => {
+                          const title = task.attributes?.title || task.title;
+                          return title.length > 20 ? title.slice(0, 20) + "..." : title;
+                        })()}
+                        {task.labels?.length > 0 ? (
+                          <div className="task-labels">
+                            {task.labels?.map((label) => (
+                              <span key={label.id} className={`label ${label.name.toLowerCase()}`}>
+                                {label.name}
+                              </span>
+                            ))}
+                          </div>
+                        ) : null}
+                      </div>
+                    </Link>
                   ))
                 )}
               </div>

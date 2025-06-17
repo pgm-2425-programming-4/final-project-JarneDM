@@ -3,6 +3,7 @@ import { RouterProvider, createRouter, createRoute, createRootRoute, Outlet } fr
 import SideBar from "./components/SideBar";
 import About from "./components/About";
 import { ProjectBoard, ProjectBacklog } from "./components/ProjectRoutes";
+import TaskDetail from "./components/TaskDetail";
 
 const rootRoute = createRootRoute({
   component: () => (
@@ -31,8 +32,14 @@ const projectBacklogRoute = createRoute({
   component: ProjectBacklog,
 });
 
+const taskDetailRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/projects/$id/tasks/$taskId",
+  component: TaskDetail,
+});
+
 const router = createRouter({
-  routeTree: rootRoute.addChildren([aboutRoute, projectBoardRoute, projectBacklogRoute]),
+  routeTree: rootRoute.addChildren([aboutRoute, projectBoardRoute, projectBacklogRoute, taskDetailRoute]),
 });
 
 const queryClient = new QueryClient();
