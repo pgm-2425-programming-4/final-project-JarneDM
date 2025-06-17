@@ -69,13 +69,13 @@ function AddTask({ show, onClose }) {
     }));
   };
 
-  // const handleLabelsChange = (e) => {
-  //   const selectedOptions = Array.from(e.target.selectedOptions).map((opt) => opt.value);
-  //   setNewTask((prev) => ({
-  //     ...prev,
-  //     labels: selectedOptions,
-  //   }));
-  // };
+  const handleLabelsChange = (e) => {
+    const selectedOptions = Array.from(e.target.selectedOptions).map((opt) => opt.value);
+    setNewTask((prev) => ({
+      ...prev,
+      labels: selectedOptions,
+    }));
+  };
 
   const addTask = async (e) => {
     e.preventDefault();
@@ -86,7 +86,7 @@ function AddTask({ show, onClose }) {
         title: newTask.title,
         taskStatus: newTask.taskStatus ? { connect: [Number(newTask.taskStatus)] } : null,
         project: newTask.project ? { connect: [Number(newTask.project)] } : null,
-        labels: newTask.labels.length ? newTask.labels.map((id) => ({ id: Number(id) })) : [],
+        labels: newTask.labels.map((id) => ({ id: Number(id) })),
       };
 
       const response = await fetch("http://localhost:1337/api/tasks", {
@@ -172,8 +172,8 @@ function AddTask({ show, onClose }) {
             <label htmlFor="labels__drop" className="labels__label">
               Label
             </label>
-            <select className="labels__drop" name="labels" id="labels__drop" value={newTask.labels} onChange={handleChange}>
-              <option value="">Select label</option>
+            <select className="labels__drop" name="labels" id="labels__drop" multiple value={newTask.labels} onChange={handleLabelsChange}>
+              <option value="">Hold CTRL to select multiple</option>
               {labels.map((label) => (
                 <option key={label.id} value={label.id}>
                   {label.name || label.id}

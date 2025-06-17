@@ -22,15 +22,19 @@
   color: #333;
 }
 
-.projects-list p {
+.projects-list a {
   margin: 8px 0;
-  padding: 5px;
+  /* padding: 5px; */
   cursor: pointer;
   border-bottom: 1px solid #419aff;
+  text-decoration: none;
+  color: black;
+  transition: 200ms ease-in-out;
 }
 
-.projects-list p:hover {
+.projects-list a:hover {
   background-color: #419aff;
+  transition: 200ms ease-in-out;
 }
 
 @media (max-width: 768px) {

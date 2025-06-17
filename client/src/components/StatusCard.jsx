@@ -6,6 +6,7 @@ function StatusCard({ selectedProject }) {
   const [statuses, setStatuses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [labels, setLabels] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -21,6 +22,7 @@ function StatusCard({ selectedProject }) {
         if (taskData?.data && statData?.data) {
           setTasks(taskData.data);
           setStatuses(statData.data);
+          setLabels(taskData.data.map((task) => task.labels?.name || []).flat());
         } else {
           setError("Unexpected data format");
         }
@@ -46,6 +48,7 @@ function StatusCard({ selectedProject }) {
   console.log("Raw tasks:", tasks);
   console.log("Raw statuses:", statuses);
   console.log("Filtered tasks:", filteredTasks);
+  console.log(labels);
 
   return (
     <div className="container">
@@ -73,6 +76,15 @@ function StatusCard({ selectedProject }) {
                         const title = task.attributes?.title || task.title;
                         return title.length > 20 ? title.slice(0, 20) + "..." : title;
                       })()}
+                      {task.labels?.length > 0 ? (
+                        <div className="task-labels">
+                          {task.labels?.map((label) => (
+                            <span key={label.id} className={`label ${label.name.toLowerCase()}`}>
+                              {label.name}
+                            </span>
+                          ))}
+                        </div>
+                      ) : null}
                     </div>
                   ))
                 )}

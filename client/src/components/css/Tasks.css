@@ -36,14 +36,24 @@
 .task-labels {
   display: flex;
   flex-wrap: wrap;
+  gap: 0.5rem;
+  /* margin-top: 0.5rem; */
+  margin-top: 1rem;
+}
+
+.label {
+  display: flex;
+  flex-wrap: wrap;
   /* gap: 0.5rem; */
-  background-color: rgb(28, 9, 231);
-  color: white;
-  padding: 0.4rem;
-  justify-content: flex-end;
+  background-color: rgb(86, 157, 243);
+  color: black;
+  padding: 0.2rem 0.4rem 0.2rem 0.4rem;
+  justify-content: center;
   width: min-content;
   border-radius: 10px;
-  font-size: 14px;
+  font-size: 11px;
+  text-align: center;
+  align-items: center;
 }
 
 .task-card {
