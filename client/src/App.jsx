@@ -4,6 +4,7 @@ import SideBar from "./components/SideBar";
 import About from "./components/About";
 import { ProjectBoard, ProjectBacklog } from "./components/ProjectRoutes";
 import TaskDetail from "./components/TaskDetail";
+import "./App.css";
 
 const rootRoute = createRootRoute({
   component: () => (

@@ -1,6 +1,6 @@
 .task-detail {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr;
   justify-content: center;
   align-items: center;
   padding: 20px;
@@ -9,4 +9,67 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   width: 40rem;
   margin: 0 auto;
+  height: auto;
+}
+
+.task-detail label {
+  display: flex;
+  flex-direction: column;
+  font-weight: 500;
+  color: #333;
+}
+
+.task-detail input[type="text"],
+.task-detail select {
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  margin-top: 0.3rem;
+}
+
+.task-detail select[multiple] {
+  height: 6rem;
+}
+
+.task-detail button[type="submit"] {
+  padding: 0.6rem 1rem;
+  background-color: #4caf50;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.task-detail button[type="submit"]:disabled {
+  background-color: #a5d6a7;
+  cursor: not-allowed;
+}
+
+.task-detail button:last-of-type {
+  padding: 0.6rem 1rem;
+  background-color: #e53935;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.task-detail .label {
+  display: inline-block;
+  background-color: #e0e0e0;
+  color: #333;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  margin-right: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.task-detail a {
+  margin-top: 1rem;
+  text-decoration: none;
+  color: #1976d2;
+  font-weight: bold;
 }

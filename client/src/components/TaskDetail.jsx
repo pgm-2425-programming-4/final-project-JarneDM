@@ -120,6 +120,29 @@ function TaskDetail() {
     }
   };
 
+  const handleDelete = async () => {
+    if (!window.confirm("Are you sure you want to delete this task?")) return;
+
+    try {
+      const res = await fetch(`http://localhost:1337/api/tasks/${task.documentId}`, {
+        method: "DELETE",
+      });
+
+      if (!res.ok) {
+        const errData = await res.json();
+        throw new Error(errData.error?.message || "Failed to delete task");
+      }
+
+      alert("Task deleted successfully!");
+      setTimeout(() => {
+        location.href = `/projects/${task.project?.name}`;
+      }, 100);
+    } catch (err) {
+      console.error("Delete error:", err);
+      alert(`Error: ${err.message}`);
+    }
+  };
+
   if (loading || dropdownLoading) return <p>Loading...</p>;
   if (error) return <p style={{ color: "red" }}>Error: {error}</p>;
   if (!task) return <p>No task loaded</p>;
@@ -185,6 +208,10 @@ function TaskDetail() {
 
         <button type="submit" disabled={submitting}>
           {submitting ? "Saving..." : "Save"}
+        </button>
+
+        <button onClick={handleDelete} style={{ marginTop: "1rem", background: "red", color: "white" }}>
+          Delete Task
         </button>
       </form>
 
