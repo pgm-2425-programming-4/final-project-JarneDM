@@ -1,12 +1,13 @@
 import React from "react";
+import "./css/TopBar.css";
 
 function TopBar({ onAddTask, onAddLabel }) {
   return (
-    <nav>
-      <button id="add-tsk" onClick={onAddTask}>
+    <nav className="topbar-nav">
+      <button id="add-tsk" className="topbar-btn" onClick={onAddTask}>
         Add Task
       </button>
-      <button id="add-label" onClick={onAddLabel}>
+      <button id="add-label" className="topbar-btn" onClick={onAddLabel}>
         Add Label
       </button>
     </nav>

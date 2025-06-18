@@ -3,40 +3,82 @@
   display: flex;
   position: absolute;
   margin-top: 0.5rem;
-  top: 30%;
+  top: 20%;
   min-height: 50vh;
   width: min-content;
 }
 
 .projects-sidebar {
   width: 200px;
-  padding: 20px;
-  background-color: #e5e4e4;
+  padding: 28px 24px 24px 24px;
+  background: linear-gradient(135deg, #e5e4e4 80%, #cbe7ff 100%);
   border-right: 2px solid #258bff;
-  border-radius: 10px;
+  border-radius: 14px;
+  box-shadow: 0 4px 16px rgba(37, 139, 255, 0.07);
+  min-height: 60vh;
 }
 
 .projects-title {
   display: flex;
   align-items: center;
-  font-size: 1.2rem;
-  margin-bottom: 15px;
-  color: #333;
+  font-size: 1.3rem;
+  margin-bottom: 18px;
+  color: #258bff;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.projects-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  margin-top: 0.5rem;
 }
 
 .projects-list a {
-  margin: 8px 0;
-  /* padding: 5px; */
+  display: inline-block;
+  padding: 7px 12px;
   cursor: pointer;
-  border-bottom: 1px solid #419aff;
+  border-radius: 8px;
   text-decoration: none;
-  color: black;
-  transition: 200ms ease-in-out;
+  color: #222;
+  background: transparent;
+  transition: background 0.18s, color 0.18s;
+  font-size: 1rem;
+  font-weight: 500;
 }
 
 .projects-list a:hover {
-  background-color: #419aff;
-  transition: 200ms ease-in-out;
+  background-color: #258bff;
+  color: #fff;
+}
+
+.projects-list div {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.add-project {
+  background-color: #258bff;
+  color: white;
+  padding: 0px 6px 2px 6px;
+  border-radius: 20%;
+  height: 1.3rem;
+  width: 1.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 0.7rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(37, 139, 255, 0.13);
+  transition: background 0.18s;
+}
+
+.add-project:hover {
+  background-color: #1761a0;
 }
 
 @media (max-width: 768px) {
@@ -47,19 +89,6 @@
     width: 100%;
     border-right: none;
     border-bottom: 1px solid #ddd;
+    min-height: unset;
   }
-}
-
-.add-project {
-  background-color: #419aff;
-  color: white;
-  padding: 0px 2px 4px 2px;
-  border-radius: 40%;
-  height: 1rem;
-  width: 1rem;
-  display: flex;
-  align-items: center;
-  /* text-align: center; */
-  justify-content: center;
-  margin-left: 0.5rem;
 }

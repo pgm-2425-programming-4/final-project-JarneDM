@@ -17,8 +17,9 @@ const PaginatedBacklog = () => {
       try {
         setLoading(true);
         const res = await fetch(
-          `http://localhost:1337/api/tasks?populate[project]=true&populate[taskStatus]=true&pagination[page]=${page}&pagination[pageSize]=${pagination.pageSize}`
+          `http://localhost:1337/api/tasks?populate[project]=true&populate[taskStatus]=true&filters[taskStatus][name][$eq]=Backlog&pagination[page]=${page}&pagination[pageSize]=${pagination.pageSize}`
         );
+
         const data = await res.json();
 
         if (data?.data) {
@@ -55,13 +56,11 @@ const PaginatedBacklog = () => {
     return <div>Error: {error}</div>;
   }
 
-  const backlogTasks = tasks.filter((task) => task?.taskStatus?.name === "Backlog");
-
   return (
     <div className="backlog-container">
       <h2 className="backlog-header">Backlog Tasks</h2>
 
-      {backlogTasks.length === 0 ? (
+      {tasks.length === 0 ? (
         <p className="no-tasks-message">No backlog tasks found.</p>
       ) : (
         <table className="backlog-table">
@@ -72,8 +71,15 @@ const PaginatedBacklog = () => {
             </tr>
           </thead>
           <tbody>
-            {backlogTasks.map((task) => (
-              <tr key={task.id} className="task-row">
+            {tasks.map((task) => (
+              <tr
+                key={task.id}
+                className="task-row"
+                style={{ cursor: "pointer" }}
+                onClick={() =>
+                  (window.location.href = `/projects/${task.project.name}/tasks/${task.documentId || task.attributes?.documentId}`)
+                }
+              >
                 <td className="task-title">{task.title}</td>
                 <td className="task-project">{task.project.name}</td>
               </tr>

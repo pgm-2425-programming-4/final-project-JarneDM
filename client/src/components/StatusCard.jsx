@@ -37,48 +37,53 @@ function StatusCard({ selectedProject, tasks }) {
   return (
     <div className="container">
       <div className="status-container">
-        {statuses.map((status) => {
-          const statusName = status.attributes?.name || status.name;
-          const statusTasks = filteredTasks.filter((task) => {
-            const taskStatusName = task.attributes?.taskStatus?.data?.attributes?.name || task.taskStatus?.name;
-            return taskStatusName === statusName;
-          });
+        {statuses
+          .filter((status) => {
+            const statusName = status.attributes?.name || status.name;
+            return statusName !== "Backlog";
+          })
+          .map((status) => {
+            const statusName = status.attributes?.name || status.name;
+            const statusTasks = filteredTasks.filter((task) => {
+              const taskStatusName = task.attributes?.taskStatus?.data?.attributes?.name || task.taskStatus?.name;
+              return taskStatusName === statusName;
+            });
 
-          return (
-            <div key={status.id} className="status-column">
-              <h3>{statusName}</h3>
-              <div className="task-cards">
-                {statusTasks.length === 0 ? (
-                  <div className="no-tasks">No tasks</div>
-                ) : (
-                  statusTasks.map((task) => (
-                    <Link
-                      key={task.id}
-                      to={`/projects/${selectedProject}/tasks/${task.documentId || task.attributes?.documentId}`}
-                      style={{ textDecoration: "none", color: "inherit" }}
-                    >
-                      <div className="task-card">
-                        {(() => {
-                          const title = task.attributes?.title || task.title;
-                          return title.length > 20 ? title.slice(0, 20) + "..." : title;
-                        })()}
-                        {task.labels?.length > 0 ? (
-                          <div className="task-labels">
-                            {task.labels?.map((label) => (
-                              <span key={label.id} className={`label ${label.name.toLowerCase()}`}>
-                                {label.name}
-                              </span>
-                            ))}
-                          </div>
-                        ) : null}
-                      </div>
-                    </Link>
-                  ))
-                )}
+            return (
+              <div key={status.id} className="status-column">
+                <h3>{statusName}</h3>
+                <div className="task-cards">
+                  {statusTasks.length === 0 ? (
+                    <div className="no-tasks">No tasks</div>
+                  ) : (
+                    statusTasks.map((task) => (
+                      <Link
+                        key={task.id}
+                        to={`/projects/${selectedProject}/tasks/${task.documentId || task.attributes?.documentId}`}
+                        style={{ textDecoration: "none", color: "inherit" }}
+                      >
+                        <div className="task-card">
+                          {(() => {
+                            const title = task.attributes?.title || task.title;
+                            return title.length > 20 ? title.slice(0, 20) + "..." : title;
+                          })()}
+                          {task.labels?.length > 0 ? (
+                            <div className="task-labels">
+                              {task.labels?.map((label) => (
+                                <span key={label.id} className={`label ${label.name.toLowerCase()}`}>
+                                  {label.name}
+                                </span>
+                              ))}
+                            </div>
+                          ) : null}
+                        </div>
+                      </Link>
+                    ))
+                  )}
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
       </div>
     </div>
   );

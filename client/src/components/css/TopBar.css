@@ -1,0 +1,27 @@
+.topbar-nav {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-bottom: 1.5rem;
+  position: fixed;
+  top: 15%;
+}
+
+.topbar-btn {
+  background-color: #258bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.2rem 0.5rem;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  box-shadow: 0 2px 6px rgba(37, 139, 255, 0.08);
+  height: 2rem;
+}
+
+.topbar-btn:hover {
+  background-color: #1761a0;
+  color: #fff;
+}
