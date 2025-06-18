@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "./css/Projects.css";
+import AddProject from "./AddProject";
 
 function SideBar() {
   const [projects, setProjects] = useState([]);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [showAddProject, setShowAddProject] = useState(false);
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -35,7 +37,12 @@ function SideBar() {
     <div className="projects-container">
       <div className="projects-sidebar">
         <a href="/about">ABOUT</a>
-        <h3 className="projects-title">PROJECTS</h3>
+        <h3 className="projects-title">
+          PROJECTS
+          <span className="add-project" style={{ cursor: "pointer" }} onClick={() => setShowAddProject(true)}>
+            +
+          </span>
+        </h3>
         <div className="projects-list">
           {projects.map((project) => (
             <div key={project.id}>
@@ -46,6 +53,11 @@ function SideBar() {
             </div>
           ))}
         </div>
+        <AddProject
+          show={showAddProject}
+          onClose={() => setShowAddProject(false)}
+          onProjectAdded={(newProject) => setProjects((prev) => [...prev, newProject])}
+        />
       </div>
     </div>
   );

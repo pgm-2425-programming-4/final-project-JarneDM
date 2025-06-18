@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "@tanstack/react-router";
+import { useParams } from "@tanstack/react-router";
 import "./css/TaskDetail.css";
 
 function TaskDetail() {
   const { taskId } = useParams({ from: "/projects/$id/tasks/$taskId" });
-  const navigate = useNavigate();
 
   const [task, setTask] = useState(null);
   const [error, setError] = useState(null);
@@ -16,13 +15,11 @@ function TaskDetail() {
   const [projects, setProjects] = useState([]);
   const [labels, setLabels] = useState([]);
 
-  // Controlled form state
   const [title, setTitle] = useState("");
   const [statusId, setStatusId] = useState("");
   const [projectId, setProjectId] = useState("");
   const [selectedLabels, setSelectedLabels] = useState([]);
 
-  // Fetch task details
   useEffect(() => {
     const fetchTask = async () => {
       try {
@@ -34,7 +31,6 @@ function TaskDetail() {
           const t = data.data[0];
           setTask(t);
 
-          // Initialize form fields from fetched task
           setTitle(t.title || "");
           setStatusId(t.taskStatus?.id || "");
           setProjectId(t.project?.id || "");
@@ -52,7 +48,6 @@ function TaskDetail() {
     fetchTask();
   }, [taskId]);
 
-  // Fetch dropdown data (statuses, projects, labels)
   useEffect(() => {
     const fetchDropdownData = async () => {
       try {
@@ -91,7 +86,6 @@ function TaskDetail() {
         },
       };
 
-      // Assuming the API supports PUT or PATCH to /api/tasks/:id
       const res = await fetch(`http://localhost:1337/api/tasks/${task.documentId}`, {
         method: "PUT",
         headers: {
@@ -107,10 +101,8 @@ function TaskDetail() {
 
       const updated = await res.json();
       setTask(updated.data);
-      // alert("Task updated successfully!");
-      // Optionally redirect or refresh data here
+
       setTimeout(() => {
-        // navigate(`/projects/${task.project?.id}`);
         location.href = `/projects/${task.project?.name}`;
       }, 100);
     } catch (err) {
@@ -154,7 +146,6 @@ function TaskDetail() {
           Title:
           <input className="task-title" type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
         </label>
-
         <label>
           Status:
           <select value={statusId} onChange={(e) => setStatusId(e.target.value)}>
@@ -166,7 +157,6 @@ function TaskDetail() {
             ))}
           </select>
         </label>
-
         <label>
           Project:
           <select value={projectId} onChange={(e) => setProjectId(e.target.value)}>
@@ -178,7 +168,6 @@ function TaskDetail() {
             ))}
           </select>
         </label>
-
         <label>
           Labels:
           <select
@@ -194,7 +183,6 @@ function TaskDetail() {
           </select>
         </label>
 
-        {/* Display current labels */}
         <div>
           Current labels:{" "}
           {task.labels?.length > 0
@@ -205,11 +193,9 @@ function TaskDetail() {
               ))
             : "None"}
         </div>
-
         <button type="submit" disabled={submitting}>
           {submitting ? "Saving..." : "Save"}
         </button>
-
         <button onClick={handleDelete} style={{ marginTop: "1rem", background: "red", color: "white" }}>
           Delete Task
         </button>
