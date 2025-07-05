@@ -5,6 +5,7 @@ import About from "./components/About";
 import { ProjectBoard, ProjectBacklog } from "./components/ProjectRoutes";
 import TaskDetail from "./components/TaskDetail";
 import "./App.css";
+import Tasks from "./components/Tasks";
 
 const rootRoute = createRootRoute({
   component: () => (
@@ -13,6 +14,12 @@ const rootRoute = createRootRoute({
       <Outlet />
     </>
   ),
+});
+
+const homeRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/",
+  component: Tasks,
 });
 
 const aboutRoute = createRoute({
@@ -40,7 +47,7 @@ const taskDetailRoute = createRoute({
 });
 
 const router = createRouter({
-  routeTree: rootRoute.addChildren([aboutRoute, projectBoardRoute, projectBacklogRoute, taskDetailRoute]),
+  routeTree: rootRoute.addChildren([aboutRoute, homeRoute, projectBoardRoute, projectBacklogRoute, taskDetailRoute]),
 });
 
 const queryClient = new QueryClient();

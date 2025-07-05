@@ -4,14 +4,15 @@ import Pagination from "./Pagination";
 import StatusCard from "./StatusCard";
 
 function Tasks({ selectedProject, setTasks, tasks }) {
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const safeTasks = Array.isArray(tasks) ? tasks : [];
+
   useEffect(() => {
-    if (tasks.length === 0) {
+    if (safeTasks.length === 0) {
       const fetchTasks = async () => {
         try {
-          setLoading(true);
           const res = await fetch(`http://localhost:1337/api/tasks?populate=*`);
           const data = await res.json();
 
@@ -23,19 +24,13 @@ function Tasks({ selectedProject, setTasks, tasks }) {
         } catch (err) {
           console.error("Failed to fetch tasks:", err);
           setError("Failed to fetch tasks");
-        } finally {
-          setLoading(false);
         }
       };
-      fetchTasks();
-    } else {
-      setLoading(false);
+      if (selectedProject) {
+        fetchTasks();
+      }
     }
-  }, [setTasks, tasks.length]);
-
-  if (loading) {
-    return <div>Loading tasks...</div>;
-  }
+  }, [setTasks, safeTasks.length, selectedProject]);
 
   if (error) {
     return <div>Error: {error}</div>;
@@ -46,10 +41,10 @@ function Tasks({ selectedProject, setTasks, tasks }) {
       <h2 className="backlog-header">{selectedProject ? `Task List for ${selectedProject}` : "Select a Project"}</h2>
 
       {selectedProject ? (
-        tasks.length === 0 ? (
+        safeTasks.length === 0 ? (
           <p className="no-tasks-message">No tasks found for this project.</p>
         ) : (
-          <StatusCard selectedProject={selectedProject} tasks={tasks} />
+          <StatusCard selectedProject={selectedProject} tasks={safeTasks} />
         )
       ) : (
         <p className="no-tasks-message">Please select a project</p>
