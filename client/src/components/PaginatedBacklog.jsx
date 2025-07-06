@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import Pagination from "./Pagination";
 import "./css/Backlog.css";
 
-const PaginatedBacklog = () => {
+const PaginatedBacklog = ({ projectId }) => {
   const [tasks, setTasks] = useState([]);
+  const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [pagination, setPagination] = useState({
@@ -17,13 +18,13 @@ const PaginatedBacklog = () => {
       try {
         setLoading(true);
         const res = await fetch(
-          `http://localhost:1337/api/tasks?populate[project]=true&populate[taskStatus]=true&filters[taskStatus][name][$eq]=Backlog&pagination[page]=${page}&pagination[pageSize]=${pagination.pageSize}`
+          `http://localhost:1337/api/projects?populate[tasks][populate]=taskStatus&pagination[page]=${page}&pagination[pageSize]=${pagination.pageSize}`
         );
 
         const data = await res.json();
 
         if (data?.data) {
-          setTasks(data.data);
+          setProjects(data.data);
           setPagination((prev) => ({
             ...prev,
             page: data.meta.pagination.page,
@@ -47,6 +48,21 @@ const PaginatedBacklog = () => {
   const handlePageChange = (newPage) => {
     setPagination((prev) => ({ ...prev, page: newPage }));
   };
+
+  useEffect(() => {
+    const backlogTasks = [];
+
+    projects.forEach((project) => {
+      const projectTasks = project.tasks || [];
+      const filteredTasks = projectTasks.filter((task) => task.taskStatus?.name === "Backlog");
+
+      if (!projectId || project.name.toLowerCase() === projectId.toLowerCase()) {
+        backlogTasks.push(...filteredTasks.map((task) => ({ ...task, project })));
+      }
+    });
+
+    setTasks(backlogTasks);
+  }, [projects, projectId]);
 
   if (loading) {
     return <div>Loading tasks...</div>;
