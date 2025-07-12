@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import "./css/Projects.css";
+import "./css/TopBar.css";
 import AddProject from "./AddProject";
 
-function SideBar() {
+function SideBar({ onAddTask, onAddLabel }) {
   const [projects, setProjects] = useState([]);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -52,6 +53,14 @@ function SideBar() {
               </a>
             </div>
           ))}
+        </div>
+        <div className="sidebar-actions">
+          <button id="add-tsk" className="topbar-btn" onClick={onAddTask}>
+            Add Task
+          </button>
+          <button id="add-label" className="topbar-btn" onClick={onAddLabel}>
+            Add Label
+          </button>
         </div>
         <AddProject
           show={showAddProject}

@@ -4,3 +4,8 @@
   padding: 0;
   display: flex;
 }
+
+.main-content {
+  margin-left: 0.5rem; /* width of the sidebar */
+  width: 100%;
+}
