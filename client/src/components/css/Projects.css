@@ -3,6 +3,18 @@
   display: flex;
 }
 
+.project-td {
+  display: flex;
+  padding: 0;
+  align-items: center;
+  text-align: center;
+}
+
+.project-backlog {
+  border-bottom: 2px solid black;
+  border-bottom-left-radius: 10px;
+}
+
 .projects-sidebar {
   width: 200px;
   height: 100vh;
@@ -35,9 +47,10 @@
   margin-top: 0.5rem;
 }
 
-.projects-list a {
+.projects-list a,
+.icons {
   display: inline-block;
-  padding: 7px 12px;
+  padding: 5px 10px;
   cursor: pointer;
   border-radius: 8px;
   text-decoration: none;
@@ -49,8 +62,9 @@
 }
 
 .projects-list a:hover {
-  background-color: #258bff;
-  color: #fff;
+  background-color: #ffffff;
+  color: black;
+  transition: 0.2s;
 }
 
 .projects-list div {
@@ -126,4 +140,26 @@
     height: auto;
     z-index: 100;
   }
+}
+/* 
+.edit-project {
+  display: none;
+} */
+
+.edit-icon,
+.delete-icon {
+  height: 1.2rem;
+  cursor: pointer;
+}
+
+.icons {
+  display: flex;
+  gap: 0.3rem;
+  margin-top: 1rem;
+  margin-bottom: 0;
+}
+
+.close-icon {
+  height: 1rem;
+  cursor: pointer;
 }
