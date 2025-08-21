@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import "./css/addTask.css";
 
-function AddTask({ show, onClose, onTaskAdded }) {
+function AddTask({ show, onClose, onTaskAdded, fetchTasks }) {
   const [newTask, setNewTask] = React.useState({
     title: "",
     taskStatus: "",
@@ -82,6 +82,7 @@ function AddTask({ show, onClose, onTaskAdded }) {
 
       onTaskAdded(createdTask);
       setNewTask({ title: "", taskStatus: "", project: "", labels: [] });
+      fetchTasks();
       if (onClose) onClose();
     } catch (err) {
       setError("Failed to add task");

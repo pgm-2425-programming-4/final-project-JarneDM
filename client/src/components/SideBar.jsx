@@ -6,7 +6,7 @@ import penIcon from "../assets/pen.png";
 import closeImage from "../assets/close.png";
 import deleteImage from "..//assets/bin.png";
 
-function SideBar({ onAddTask, onAddLabel }) {
+function SideBar({ onAddLabel }) {
   const [projects, setProjects] = useState([]);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -178,9 +178,6 @@ function SideBar({ onAddTask, onAddLabel }) {
         )}
 
         <div className="sidebar-actions">
-          <button id="add-tsk" className="topbar-btn" onClick={onAddTask}>
-            Add Task
-          </button>
           <button id="add-label" className="topbar-btn" onClick={onAddLabel}>
             Add Label
           </button>
