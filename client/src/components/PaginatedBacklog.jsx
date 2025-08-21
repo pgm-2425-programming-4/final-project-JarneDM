@@ -53,11 +53,22 @@ const PaginatedBacklog = ({ projectId }) => {
     const backlogTasks = [];
 
     projects.forEach((project) => {
-      const projectTasks = project.tasks || [];
-      const filteredTasks = projectTasks.filter((task) => task.taskStatus?.name === "Backlog");
+      // Strapi: taken zitten meestal in project.attributes.tasks.data
+      const projectTasks = project?.tasks || [];
+      const filteredTasks = projectTasks.filter((task) => task?.taskStatus?.name === "Backlog");
 
-      if (!projectId || project.name.toLowerCase() === projectId.toLowerCase()) {
-        backlogTasks.push(...filteredTasks.map((task) => ({ ...task, project })));
+      if (!projectId || project?.name?.toLowerCase() === projectId.toLowerCase()) {
+        backlogTasks.push(
+          ...filteredTasks.map((task) => ({
+            // Strapi: id en title zitten in task.id en task.attributes.title
+            id: task.id,
+            title: task.title || task.attributes.title,
+            documentId: task.documentId || task.attributes.documentId,
+            project: {
+              name: project.name || project.attributes.name,
+            },
+          }))
+        );
       }
     });
 
@@ -92,9 +103,7 @@ const PaginatedBacklog = ({ projectId }) => {
                 key={task.id}
                 className="task-row"
                 style={{ cursor: "pointer" }}
-                onClick={() =>
-                  (window.location.href = `/projects/${task.project.name}/tasks/${task.documentId || task.attributes?.documentId}`)
-                }
+                onClick={() => (window.location.href = `/projects/${task.project.name}/tasks/${task.documentId}`)}
               >
                 <td className="task-title">{task.title}</td>
                 <td className="task-project">{task.project.name}</td>
