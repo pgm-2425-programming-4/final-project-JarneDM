@@ -19,6 +19,7 @@ function TaskDetail() {
   const [statusId, setStatusId] = useState("");
   const [projectId, setProjectId] = useState("");
   const [selectedLabels, setSelectedLabels] = useState([]);
+  const [deleteTask, setDeleteTask] = useState(null);
 
   useEffect(() => {
     const fetchTask = async () => {
@@ -113,10 +114,8 @@ function TaskDetail() {
   };
 
   const handleDelete = async () => {
-    if (!window.confirm("Are you sure you want to delete this task?")) return;
-
     try {
-      const res = await fetch(`http://localhost:1337/api/tasks/${task.documentId}`, {
+      const res = await fetch(`http://localhost:1337/api/tasks/${deleteTask.documentId}`, {
         method: "DELETE",
       });
 
@@ -125,7 +124,6 @@ function TaskDetail() {
         throw new Error(errData.error?.message || "Failed to delete task");
       }
 
-      alert("Task deleted successfully!");
       setTimeout(() => {
         location.href = `/projects/${task.project?.name}`;
       }, 100);
@@ -196,10 +194,21 @@ function TaskDetail() {
         <button type="submit" disabled={submitting}>
           {submitting ? "Saving..." : "Save"}
         </button>
-        <button onClick={handleDelete} style={{ marginTop: "1rem", background: "red", color: "white" }}>
+        <button type="button" onClick={() => setDeleteTask(task)} style={{ marginTop: "1rem", background: "red", color: "white" }}>
           Delete Task
         </button>
       </form>
+      {deleteTask && (
+        <div className=" pop-up delete-task">
+          <p>Are you sure you want to delete this task?</p>
+          <button className="delete-button" onClick={handleDelete}>
+            Delete
+          </button>
+          <button className="cancel-button" onClick={() => setDeleteTask(null)}>
+            Cancel
+          </button>
+        </div>
+      )}
 
       <a href={`/projects/${task.project?.name}`}>Back to Projects</a>
     </div>

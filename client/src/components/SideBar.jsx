@@ -170,10 +170,14 @@ function SideBar({ onAddLabel }) {
         )}
 
         {deleteProject && (
-          <div className="delete-project">
+          <div className=" pop-up delete-project">
             <p>Are you sure you want to delete this project?</p>
-            <button onClick={handleDelete}>Delete</button>
-            <button onClick={() => setDeleteProject(null)}>Cancel</button>
+            <button className="delete-button" onClick={handleDelete}>
+              Delete
+            </button>
+            <button className="cancel-button" onClick={() => setDeleteProject(null)}>
+              Cancel
+            </button>
           </div>
         )}
 
