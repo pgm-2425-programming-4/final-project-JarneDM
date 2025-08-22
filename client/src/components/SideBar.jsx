@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import "./css/Projects.css";
 import "./css/TopBar.css";
 import AddProject from "./AddProject";
@@ -16,38 +16,53 @@ function SideBar({ onAddLabel }) {
   const [newProjectName, setNewProjectName] = useState("");
   const [deleteProject, setDeleteProject] = useState(null);
 
-  useEffect(() => {
-    const fetchProjects = async () => {
-      try {
-        const res = await fetch(`http://localhost:1337/api/projects`);
-        if (!res.ok) throw new Error("Failed to fetch projects");
+  const fetchProjects = useCallback(async () => {
+    try {
+      const res = await fetch(`http://localhost:1337/api/projects`);
+      if (!res.ok) throw new Error("Failed to fetch projects");
 
-        const data = await res.json();
-        if (data?.data) {
-          setProjects(data.data);
-        } else {
-          setError("Unexpected data format");
-        }
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setIsLoading(false);
+      const data = await res.json();
+      if (data?.data) {
+        setProjects(data.data);
+      } else {
+        setError("Unexpected data format");
       }
-    };
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
 
+  useEffect(() => {
     fetchProjects();
-  }, [editingProject]);
+  }, [fetchProjects]);
 
   const handleEditProject = async (e) => {
     e.preventDefault();
     if (!editingProject) return;
 
     try {
+      const getRes = await fetch(`http://localhost:1337/api/projects/${editingProject.documentId}?populate=*`);
+      if (!getRes.ok) {
+        throw new Error("Failed to fetch current project data");
+      }
+
+      const currentData = await getRes.json();
+      const currentProject = currentData.data;
+
+      const taskIds = currentProject.tasks?.map((task) => task.id) || [];
+      const statusIds = currentProject.statuses?.map((status) => status.id) || [];
+
       const body = {
         data: {
           name: newProjectName,
+          tasks: taskIds,
+          statuses: statusIds,
         },
       };
+
+      console.log("PUT request body:", body);
 
       const res = await fetch(`http://localhost:1337/api/projects/${editingProject.documentId}`, {
         method: "PUT",
@@ -58,17 +73,18 @@ function SideBar({ onAddLabel }) {
       });
 
       if (!res.ok) {
-        const errData = await res.json();
-        throw new Error(errData.error?.message || "Failed to update project");
+        const errorText = await res.text();
+        console.error("Server response:", errorText);
+        throw new Error(errorText || "Failed to update project");
       }
 
       const updated = await res.json();
-
       setProjects((prev) => prev.map((p) => (p.id === updated.data.id ? updated.data : p)));
-
       setEditingProject(null);
+      fetchProjects();
     } catch (err) {
-      console.error(err);
+      console.error("Update error:", err);
+      alert("Error updating project: " + err.message);
     }
   };
 
@@ -126,11 +142,15 @@ function SideBar({ onAddLabel }) {
                     <img className="delete-icon" onClick={() => setDeleteProject(project)} src={deleteImage} alt="Delete Project" />
                   </td>
                   <td className="project-td">
-                    <a href={`/projects/${project.name}`}>{project.name}</a>
+                    <a href={`/projects/${project.documentId}`}>{project.name}</a>
                   </td>
 
                   <td className="project-td">
-                    <a className="project-backlog" href={`/projects/${project.name}/backlog`} style={{ marginLeft: 8, fontSize: "0.9em" }}>
+                    <a
+                      className="project-backlog"
+                      href={`/projects/${project.documentId}/backlog`}
+                      style={{ marginLeft: 8, fontSize: "0.9em" }}
+                    >
                       Backlog
                     </a>
                   </td>
