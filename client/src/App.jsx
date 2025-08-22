@@ -9,6 +9,7 @@ import "./App.css";
 import Tasks from "./components/Tasks";
 import AddTask from "./components/AddTask";
 import AddLabel from "./components/AddLabel";
+import EditTask from "./components/EditTask";
 
 const rootRoute = createRootRoute({
   component: () => (
@@ -56,8 +57,22 @@ const taskDetailRoute = createRoute({
   component: TaskDetail,
 });
 
+const editTaskRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/projects/$id/tasks/$taskId/edit",
+  component: EditTask,
+});
+
 const router = createRouter({
-  routeTree: rootRoute.addChildren([aboutRoute, homeRoute, projectBoardRoute, projectBacklogRoute, taskDetailRoute, projectEditRoute]),
+  routeTree: rootRoute.addChildren([
+    aboutRoute,
+    homeRoute,
+    projectBoardRoute,
+    projectBacklogRoute,
+    taskDetailRoute,
+    projectEditRoute,
+    editTaskRoute,
+  ]),
 });
 
 const queryClient = new QueryClient();
