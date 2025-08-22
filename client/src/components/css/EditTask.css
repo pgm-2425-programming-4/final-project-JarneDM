@@ -1,0 +1,75 @@
+.edit-task {
+  display: grid;
+  grid-template-columns: 1fr;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 40rem;
+  margin: 0 auto;
+  height: auto;
+}
+
+.edit-task label {
+  display: flex;
+  flex-direction: column;
+  font-weight: 500;
+  color: #333;
+}
+
+.edit-task input[type="text"],
+.edit-task select {
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  margin-top: 0.3rem;
+}
+
+.edit-task select[multiple] {
+  height: 6rem;
+}
+
+.edit-task button[type="submit"] {
+  padding: 0.6rem 1rem;
+  background-color: #4caf50;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.edit-task button[type="submit"]:disabled {
+  background-color: #a5d6a7;
+  cursor: not-allowed;
+}
+
+.edit-task button:last-of-type {
+  padding: 0.6rem 1rem;
+  background-color: #e53935;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.edit-task .label {
+  display: inline-block;
+  background-color: #e0e0e0;
+  color: #333;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  margin-right: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.edit-task a {
+  margin-top: 1rem;
+  text-decoration: none;
+  /* color: #1976d2; */
+  font-weight: bold;
+}
