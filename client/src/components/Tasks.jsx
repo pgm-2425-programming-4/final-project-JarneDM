@@ -16,7 +16,7 @@ function Tasks({ selectedProject, setTasks, tasks }) {
 
   const buildTasksUrl = useCallback(() => {
     if (!selectedProject) return "";
-    return `http://localhost:1337/api/tasks?populate=*&filters[project][name][$eq]=${selectedProject}`;
+    return `http://localhost:1337/api/tasks?populate=*&filters[project][documentId][$eq]=${selectedProject.documentId}`;
   }, [selectedProject]);
 
   const fetchTasks = useCallback(async () => {

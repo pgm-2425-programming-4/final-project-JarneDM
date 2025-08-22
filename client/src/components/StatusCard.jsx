@@ -30,10 +30,6 @@ function StatusCard({ selectedProject, tasks }) {
   if (loading) return <div>Loading task statuses...</div>;
   if (error) return <div>Error: {error}</div>;
 
-  const filteredTasks = selectedProject
-    ? tasks.filter((task) => task.project?.name && task.project.name.toLowerCase() === selectedProject.toLowerCase())
-    : tasks;
-
   return (
     <div className="container">
       <div className="status-container">
@@ -44,8 +40,8 @@ function StatusCard({ selectedProject, tasks }) {
           })
           .map((status) => {
             const statusName = status.attributes?.name || status.name;
-            const statusTasks = filteredTasks.filter((task) => {
-              const taskStatusName = task.attributes?.taskStatus?.data?.attributes?.name || task.taskStatus?.name;
+            const statusTasks = tasks.filter((task) => {
+              const taskStatusName = task.taskStatus?.name || task.taskStatus?.data?.attributes?.name || task.taskStatus;
               return taskStatusName === statusName;
             });
 
@@ -59,17 +55,14 @@ function StatusCard({ selectedProject, tasks }) {
                     statusTasks.map((task) => (
                       <Link
                         key={task.id}
-                        to={`/projects/${selectedProject}/tasks/${task.documentId || task.attributes?.documentId}`}
+                        to={`/projects/${selectedProject.documentId}/tasks/${task.documentId}`}
                         style={{ textDecoration: "none", color: "inherit" }}
                       >
                         <div className="task-card">
-                          {(() => {
-                            const title = task.attributes?.title || task.title;
-                            return title.length > 20 ? title.slice(0, 20) + "..." : title;
-                          })()}
+                          {task.title.length > 20 ? task.title.slice(0, 20) + "..." : task.title}
                           {task.labels?.length > 0 ? (
                             <div className="task-labels">
-                              {task.labels?.map((label) => (
+                              {task.labels.map((label) => (
                                 <span key={label.id} className={`label ${label.name.toLowerCase()}`}>
                                   {label.name}
                                 </span>
