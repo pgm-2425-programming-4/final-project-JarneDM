@@ -22,6 +22,9 @@ function EditTask() {
   const [selectedLabels, setSelectedLabels] = useState([]);
   const [deleteTask, setDeleteTask] = useState(null);
 
+  const [showLabels, setShowLabels] = useState(false);
+  // const [deleteLabel, setDeleteLabel] = useState(null);
+
   useEffect(() => {
     const fetchTask = async () => {
       try {
@@ -136,6 +139,24 @@ function EditTask() {
     }
   };
 
+  const handleDeleteLabel = async (labelId) => {
+    try {
+      const res = await fetch(`http://localhost:1337/api/labels/${labelId}`, {
+        method: "DELETE",
+      });
+
+      if (!res.ok) {
+        const errData = await res.json();
+        throw new Error(errData.error?.message || "Failed to delete label");
+      }
+
+      setLabels((prevLabels) => prevLabels.filter((label) => label.id !== labelId));
+    } catch (err) {
+      console.error("Delete label error:", err);
+      alert(`Error: ${err.message}`);
+    }
+  };
+
   if (loading || dropdownLoading) return <p>Loading...</p>;
   if (error) return <p style={{ color: "red" }}>Error: {error}</p>;
   if (!task) return <p>No task loaded</p>;
@@ -185,7 +206,6 @@ function EditTask() {
             ))}
           </select>
         </label>
-
         <div>
           Current labels:{" "}
           {task.labels?.length > 0
@@ -195,6 +215,22 @@ function EditTask() {
                 </span>
               ))
             : "None"}
+        </div>
+        <div>
+          <button type="button" id="label-overlay-button" onClick={() => setShowLabels(true)} className="label-overlay-button">
+            Labels &rarr;
+          </button>
+        </div>
+        <div className="label-overlay">
+          {showLabels && labels && labels.length > 0 ? (
+            labels.map((label) => (
+              <span key={label.id} className={`label ${label.name.toLowerCase()}`}>
+                {label.name} <button onClick={() => handleDeleteLabel(label.documentId)}>Delete</button>
+              </span>
+            ))
+          ) : (
+            <p>No labels available</p>
+          )}
         </div>
         <button type="submit" disabled={submitting}>
           {submitting ? "Saving..." : "Save"}
