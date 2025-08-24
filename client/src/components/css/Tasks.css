@@ -19,6 +19,14 @@
   width: 60rem;
 }
 
+.task-header {
+  font-weight: 700;
+  color: #258bff;
+  border-bottom: 2px solid #e5e4e4;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+}
+
 .status-row {
   display: flex;
   margin: 0 3rem 1rem 3rem;
