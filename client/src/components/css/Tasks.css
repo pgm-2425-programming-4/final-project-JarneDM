@@ -10,6 +10,14 @@
   background: none;
   overflow-x: auto;
 }
+.task-container {
+  display: grid;
+  margin: 0 auto;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  padding: 10px;
+  border-radius: 8px;
+  width: 60rem;
+}
 
 .status-row {
   display: flex;

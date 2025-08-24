@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import "./css/Projects.css";
 import "./css/TopBar.css";
+import "./css/overlay.css";
 import AddProject from "./AddProject";
 import penIcon from "../assets/pen.png";
 import closeImage from "../assets/close.png";
@@ -190,20 +191,22 @@ function SideBar({ onAddLabel }) {
         )}
 
         {deleteProject && (
-          <div className=" pop-up delete-project">
+          <div className="overlay-pop-up delete-project">
             <p>Are you sure you want to delete this project?</p>
-            <button className="delete-button" onClick={handleDelete}>
-              Delete
-            </button>
-            <button className="cancel-button" onClick={() => setDeleteProject(null)}>
-              Cancel
-            </button>
+            <div className="pop-up-buttons">
+              <button className="btn-delete" onClick={handleDelete}>
+                Delete
+              </button>
+              <button className="btn-cancel" onClick={() => setDeleteProject(null)}>
+                Cancel
+              </button>
+            </div>
           </div>
         )}
 
-        <div className="sidebar-actions">
-          <button id="add-label" className="topbar-btn" onClick={onAddLabel}>
-            Add Label
+        <div className="sidebar-labels">
+          <button className="add-label-btn" onClick={onAddLabel}>
+            ＋ Add Label
           </button>
         </div>
 

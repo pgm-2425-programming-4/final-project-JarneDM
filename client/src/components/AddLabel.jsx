@@ -29,31 +29,31 @@ function AddLabel({ show, onClose }) {
 
   if (!show) return null;
   return (
-    <section className={`overlay${show ? "" : " hidden"}`} id="overlay-label">
-      <form onSubmit={addLabel}>
-        <div className="task-title">
-          <label htmlFor="label-name-input" className="task-title__label">
-            Label Name
-          </label>
+    <section className={`overlay ${show ? "" : "hidden"}`}>
+      <form className="overlay-form" onSubmit={addLabel}>
+        <div className="form-group">
+          <label htmlFor="label-name-input">Label Name</label>
           <input
-            type="text"
             id="label-name-input"
-            className="task-title__input"
+            className="input-field"
+            type="text"
             name="name"
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
           />
         </div>
+
+        {error && <div className="error-message">{error}</div>}
+
         <div className="buttons">
-          <button className="add-task-btn btn" type="submit" disabled={submitting}>
-            Add
+          <button className="btn btn-primary" type="submit" disabled={submitting}>
+            Add Label
           </button>
-          <button className="btn" type="button" onClick={onClose} style={{ marginLeft: 8 }}>
+          <button className="btn btn-secondary" type="button" onClick={onClose}>
             Close
           </button>
         </div>
-        {error && <div style={{ color: "red" }}>{error}</div>}
       </form>
     </section>
   );

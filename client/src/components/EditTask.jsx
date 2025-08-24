@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "@tanstack/react-router";
 import "./css/EditTask.css";
+import "./css/overlay.css";
 
 function EditTask() {
   const { taskId } = useParams({ from: "/projects/$id/tasks/$taskId" });
@@ -22,8 +23,8 @@ function EditTask() {
   const [selectedLabels, setSelectedLabels] = useState([]);
   const [deleteTask, setDeleteTask] = useState(null);
 
+  const [newLabelName, setNewLabelName] = useState("");
   const [showLabels, setShowLabels] = useState(false);
-  // const [deleteLabel, setDeleteLabel] = useState(null);
 
   useEffect(() => {
     const fetchTask = async () => {
@@ -35,7 +36,6 @@ function EditTask() {
         if (data.data && data.data.length > 0) {
           const t = data.data[0];
           setTask(t);
-
           setTitle(t.title || "");
           setDescription(t.description || "");
           setStatusId(t.taskStatus?.id || "");
@@ -81,7 +81,6 @@ function EditTask() {
     e.preventDefault();
     setSubmitting(true);
     setError(null);
-
     try {
       const body = {
         data: {
@@ -95,9 +94,7 @@ function EditTask() {
 
       const res = await fetch(`http://localhost:1337/api/tasks/${task.documentId}`, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
 
@@ -108,7 +105,6 @@ function EditTask() {
 
       const updated = await res.json();
       setTask(updated.data);
-
       setTimeout(() => {
         location.href = `/projects/${task.project?.documentId}`;
       }, 100);
@@ -121,38 +117,51 @@ function EditTask() {
 
   const handleDelete = async () => {
     try {
-      const res = await fetch(`http://localhost:1337/api/tasks/${deleteTask.documentId}`, {
-        method: "DELETE",
-      });
-
+      const res = await fetch(`http://localhost:1337/api/tasks/${deleteTask.documentId}`, { method: "DELETE" });
       if (!res.ok) {
         const errData = await res.json();
         throw new Error(errData.error?.message || "Failed to delete task");
       }
-
       setTimeout(() => {
         location.href = `/projects/${task.project?.documentId}`;
       }, 100);
     } catch (err) {
-      console.error("Delete error:", err);
+      console.error(err);
       alert(`Error: ${err.message}`);
     }
   };
 
   const handleDeleteLabel = async (labelId) => {
     try {
-      const res = await fetch(`http://localhost:1337/api/labels/${labelId}`, {
-        method: "DELETE",
-      });
-
+      const res = await fetch(`http://localhost:1337/api/labels/${labelId}`, { method: "DELETE" });
       if (!res.ok) {
         const errData = await res.json();
         throw new Error(errData.error?.message || "Failed to delete label");
       }
-
-      setLabels((prevLabels) => prevLabels.filter((label) => label.id !== labelId));
+      // Remove from labels state & deselect from task if selected
+      setLabels((prev) => prev.filter((label) => label.id !== labelId));
+      setSelectedLabels((prev) => prev.filter((id) => id !== labelId));
     } catch (err) {
-      console.error("Delete label error:", err);
+      console.error(err);
+      alert(`Error: ${err.message}`);
+    }
+  };
+
+  const handleAddLabel = async () => {
+    if (!newLabelName.trim()) return;
+    try {
+      const res = await fetch("http://localhost:1337/api/labels", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ data: { name: newLabelName } }),
+      });
+      if (!res.ok) throw new Error("Failed to add label");
+      const newLabel = (await res.json()).data;
+      setLabels((prev) => [...prev, newLabel]);
+      setSelectedLabels((prev) => [...prev, newLabel.id]);
+      setNewLabelName("");
+    } catch (err) {
+      console.error(err);
       alert(`Error: ${err.message}`);
     }
   };
@@ -163,95 +172,147 @@ function EditTask() {
 
   return (
     <div className="edit-task">
-      <form onSubmit={handleSubmit}>
-        <label>
+      <form className="edit-task-form" onSubmit={handleSubmit}>
+        <label className="edit-task-label">
           Title:
-          <input className="task-title" type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
+          <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} className="edit-task-input" />
         </label>
-        <label htmlFor="description">Description:</label>
-        <textarea id="description" value={description} onChange={(e) => setDescription(e.target.value)} />
-        <label>
+
+        <label className="edit-task-label">
+          Description:
+          <textarea value={description} onChange={(e) => setDescription(e.target.value)} className="edit-task-textarea" />
+        </label>
+
+        <label className="edit-task-label">
           Status:
-          <select value={statusId} onChange={(e) => setStatusId(e.target.value)}>
+          <select value={statusId} onChange={(e) => setStatusId(e.target.value)} className="edit-task-select">
             <option value="">-- Select Status --</option>
-            {statuses.map((status) => (
-              <option key={status.id} value={status.id}>
-                {status.name}
+            {statuses.map((s) => (
+              <option key={s.id} value={s.id}>
+                {s.name}
               </option>
             ))}
           </select>
         </label>
-        <label>
+
+        <label className="edit-task-label">
           Project:
-          <select value={projectId} onChange={(e) => setProjectId(e.target.value)}>
+          <select value={projectId} onChange={(e) => setProjectId(e.target.value)} className="edit-task-select">
             <option value="">-- Select Project --</option>
-            {projects.map((project) => (
-              <option key={project.id} value={project.id}>
-                {project.name}
+            {projects.map((p) => (
+              <option key={p.id} value={p.id}>
+                {p.name}
               </option>
             ))}
           </select>
         </label>
-        <label>
-          Labels:
+
+        <label className="edit-task-label">
+          Add Labels:
           <select
-            multiple
-            value={selectedLabels}
-            onChange={(e) => setSelectedLabels(Array.from(e.target.selectedOptions, (opt) => parseInt(opt.value)))}
+            value=""
+            onChange={(e) => {
+              const labelId = parseInt(e.target.value);
+              if (labelId && !selectedLabels.includes(labelId)) {
+                setSelectedLabels((prev) => [...prev, labelId]);
+              }
+              e.target.value = "";
+            }}
+            className="edit-task-select"
           >
-            {labels.map((label) => (
-              <option key={label.id} value={label.id}>
-                {label.name}
-              </option>
-            ))}
+            <option value="">-- Select Label --</option>
+            {labels
+              .filter((l) => !selectedLabels.includes(l.id))
+              .map((l) => (
+                <option key={l.id} value={l.id}>
+                  {l.name}
+                </option>
+              ))}
           </select>
         </label>
-        <div>
+
+        <div className="edit-task-selected-labels">
           Current labels:{" "}
-          {task.labels?.length > 0
-            ? task.labels.map((label) => (
-                <span key={label.id} className={`label ${label.name.toLowerCase()}`}>
-                  {label.name}{" "}
-                </span>
-              ))
+          {selectedLabels.length > 0
+            ? selectedLabels.map((id) => {
+                const label = labels.find((l) => l.id === id);
+                if (!label) return null;
+                return (
+                  <span key={id} className="edit-task-selected-label">
+                    {label.name}{" "}
+                    <button type="button" onClick={() => setSelectedLabels((prev) => prev.filter((lId) => lId !== id))}>
+                      ×
+                    </button>
+                  </span>
+                );
+              })
             : "None"}
         </div>
-        <div>
-          <button type="button" id="label-overlay-button" onClick={() => setShowLabels(true)} className="label-overlay-button">
-            Labels &rarr;
+
+        <div className="edit-task-add-label">
+          <input
+            type="text"
+            placeholder="New label name"
+            value={newLabelName}
+            onChange={(e) => setNewLabelName(e.target.value)}
+            className="edit-task-add-label-input"
+          />
+          <button type="button" onClick={handleAddLabel} className="edit-task-add-label-button">
+            Add Label
           </button>
         </div>
-        <div className="label-overlay">
-          {showLabels && labels && labels.length > 0 ? (
-            labels.map((label) => (
-              <span key={label.id} className={`label ${label.name.toLowerCase()}`}>
-                {label.name} <button onClick={() => handleDeleteLabel(label.documentId)}>Delete</button>
-              </span>
-            ))
-          ) : (
-            <p>No labels available</p>
-          )}
-        </div>
-        <button type="submit" disabled={submitting}>
+
+        <button type="button" className="edit-task-overlay-toggle" onClick={() => setShowLabels(!showLabels)}>
+          Manage Labels &rarr;
+        </button>
+
+        {showLabels && (
+          <div className="edit-task-label-overlay">
+            <h3>All Labels</h3>
+            {labels.length > 0 ? (
+              labels.map((label) => (
+                <span key={label.id} className="edit-task-selected-label">
+                  {label.name}{" "}
+                  <button className="delete-label" type="button" onClick={() => handleDeleteLabel(label.id)}>
+                    Delete
+                  </button>
+                </span>
+              ))
+            ) : (
+              <p>No labels available</p>
+            )}
+            <button className="close-overlay" type="button" onClick={() => setShowLabels(false)}>
+              Close
+            </button>
+          </div>
+        )}
+
+        <button type="submit" className="edit-task-submit" disabled={submitting}>
           {submitting ? "Saving..." : "Save"}
         </button>
-        <button type="button" onClick={() => setDeleteTask(task)} style={{ marginTop: "1rem", background: "red", color: "white" }}>
+
+        <button type="button" className="edit-task-delete" onClick={() => setDeleteTask(task)}>
           Delete Task
         </button>
       </form>
+
       {deleteTask && (
-        <div className=" pop-up delete-task">
+        <div className="overlay-pop-up edit-task-delete-pop-up">
           <p>Are you sure you want to delete this task?</p>
-          <button className="delete-button" onClick={handleDelete}>
-            Delete
-          </button>
-          <button className="cancel-button" onClick={() => setDeleteTask(null)}>
-            Cancel
-          </button>
+          <div className="pop-up-buttons">
+            <button className="btn-delete" onClick={handleDelete}>
+              Delete
+            </button>
+            <button className="btn-cancel" onClick={() => setDeleteTask(null)}>
+              Cancel
+            </button>
+          </div>
         </div>
       )}
 
-      <a href={`/projects/${task.project?.documentId}`}>Back to Projects</a>
+      <a href={`/projects/${task.project?.documentId}`} className="edit-task-back-link">
+        Back to Projects
+      </a>
     </div>
   );
 }
