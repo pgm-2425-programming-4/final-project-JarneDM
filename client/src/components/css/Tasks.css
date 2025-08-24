@@ -10,6 +10,22 @@
   background: none;
   overflow-x: auto;
 }
+.task-container {
+  display: grid;
+  margin: 0 auto;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  padding: 10px;
+  border-radius: 8px;
+  width: 60rem;
+}
+
+.task-header {
+  font-weight: 700;
+  color: #258bff;
+  border-bottom: 2px solid #e5e4e4;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+}
 
 .status-row {
   display: flex;

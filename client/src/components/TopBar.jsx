@@ -1,17 +1,25 @@
-// import React from "react";
-// import "./css/TopBar.css";
+import React from "react";
+import "./css/TopBar.css";
 
-// function TopBar({ onAddTask, onAddLabel }) {
-//   return (
-//     <nav className="topbar-nav">
-//       <button id="add-tsk" className="topbar-btn" onClick={onAddTask}>
-//         Add Task
-//       </button>
-//       <button id="add-label" className="topbar-btn" onClick={onAddLabel}>
-//         Add Label
-//       </button>
-//     </nav>
-//   );
-// }
+function TopBar({ searchInput, setSearchInput, searched, handleSearch, onAddTask }) {
+  return (
+    <nav className="topbar-nav">
+      <input
+        type="text"
+        placeholder="Search tasks..."
+        value={searchInput}
+        onChange={(e) => setSearchInput(e.target.value)}
+        className="topbar-search"
+      />
+      <button id="search-btn" className="topbar-btn" onClick={handleSearch}>
+        {searched ? "Clear Search" : "Search"}
+      </button>
 
-// export default TopBar;
+      <button id="add-task" className="topbar-btn" onClick={onAddTask}>
+        + Add Task
+      </button>
+    </nav>
+  );
+}
+
+export default TopBar;

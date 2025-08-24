@@ -3,6 +3,7 @@ import "./css/Tasks.css";
 import Pagination from "./Pagination";
 import StatusCard from "./StatusCard";
 import AddTask from "./AddTask";
+import TopBar from "./TopBar";
 
 function Tasks({ selectedProject, setTasks, tasks }) {
   const [error, setError] = useState(null);
@@ -68,21 +69,18 @@ function Tasks({ selectedProject, setTasks, tasks }) {
   }
 
   return (
-    <div className="backlog-container">
+    <div className="task-container">
       <header>
-        <h2 className="backlog-header">
-          {selectedProject ? `Task List for ${selectedProject.name || selectedProject}` : "Select a Project"}
-        </h2>
-
-        <div style={{ display: "flex", gap: "8px" }}>
-          <input type="text" placeholder="Search tasks..." value={searchInput} onChange={(e) => setSearchInput(e.target.value)} />
-          <button id="search-btn" onClick={handleSearch}>
-            {searched ? "Clear Search" : "Search"}
-          </button>
-
-          <button onClick={() => setShowAddTask(true)}>+ Add Task</button>
-        </div>
+        <h2 className="task-header">{selectedProject ? `Task List for ${selectedProject.name || selectedProject}` : "Select a Project"}</h2>
       </header>
+
+      <TopBar
+        searchInput={searchInput}
+        setSearchInput={setSearchInput}
+        searched={searched}
+        handleSearch={handleSearch}
+        onAddTask={() => setShowAddTask(true)}
+      />
 
       {loading ? (
         <p>Loading tasks...</p>

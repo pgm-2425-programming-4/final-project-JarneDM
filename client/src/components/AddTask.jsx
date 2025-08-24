@@ -49,14 +49,6 @@ function AddTask({ show, onClose, onTaskAdded, fetchTasks }) {
     }));
   };
 
-  const handleLabelsChange = (e) => {
-    const selectedOptions = Array.from(e.target.selectedOptions).map((opt) => opt.value);
-    setNewTask((prev) => ({
-      ...prev,
-      labels: selectedOptions,
-    }));
-  };
-
   const addTask = async (e) => {
     e.preventDefault();
     setSubmitting(true);
@@ -105,77 +97,111 @@ function AddTask({ show, onClose, onTaskAdded, fetchTasks }) {
 
   if (!show) return null;
   return (
-    <>
-      <section className={`overlay ${show ? "" : " hidden"}`} id="overlay">
-        <form onSubmit={addTask}>
-          <div className="task-title">
-            <label htmlFor="task-title__input" className="task-title__label">
-              Title
-            </label>
-            <input
-              type="text"
-              id="task-title__input"
-              className="task-title__input"
-              name="title"
-              value={newTask.title}
-              onChange={handleChange}
-            />
-          </div>
+    <section className={`overlay ${show ? "" : "hidden"}`}>
+      <form className="overlay-form" onSubmit={addTask}>
+        <div className="form-group">
+          <label htmlFor="task-title-input">Title</label>
+          <input
+            id="task-title-input"
+            className="input-field"
+            type="text"
+            name="title"
+            value={newTask.title}
+            onChange={handleChange}
+            required
+          />
+        </div>
 
-          <div className="status">
-            <label htmlFor="status__drop" className="status__label">
-              Status
-            </label>
-            <select className="status__drop" name="taskStatus" id="status__drop" value={newTask.taskStatus} onChange={handleChange}>
-              <option value="">Select status</option>
-              {statuses.map((status) => (
-                <option key={status.id} value={status.id}>
-                  {status.name || status.id}
+        <div className="form-group">
+          <label htmlFor="task-status-select">Status</label>
+          <select id="task-status-select" className="select-field" name="taskStatus" value={newTask.taskStatus} onChange={handleChange}>
+            <option value="">Select status</option>
+            {statuses.map((status) => (
+              <option key={status.id} value={status.id}>
+                {status.name || status.id}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="project-select">Project</label>
+          <select id="project-select" className="select-field" name="project" value={newTask.project} onChange={handleChange}>
+            <option value="">Select project</option>
+            {projects.map((project) => (
+              <option key={project.id} value={project.id}>
+                {project.name || project.id}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="labels-select">Labels</label>
+          <select
+            id="labels-select"
+            className="edit-task-select"
+            value=""
+            onChange={(e) => {
+              const labelId = parseInt(e.target.value);
+              if (labelId && !newTask.labels.includes(labelId)) {
+                setNewTask((prev) => ({
+                  ...prev,
+                  labels: [...prev.labels, labelId],
+                }));
+              }
+              e.target.value = "";
+            }}
+          >
+            <option value="">-- Select Label --</option>
+            {labels
+              .filter((l) => !newTask.labels.includes(l.id))
+              .map((l) => (
+                <option key={l.id} value={l.id}>
+                  {l.name}
                 </option>
               ))}
-            </select>
-          </div>
+          </select>
 
-          <div className="project">
-            <label htmlFor="project__drop" className="project__label">
-              Project
-            </label>
-            <select className="project__drop" name="project" id="project__drop" value={newTask.project} onChange={handleChange}>
-              <option value="">Select project</option>
-              {projects.map((project) => (
-                <option key={project.id} value={project.id}>
-                  {project.name || project.id}
-                </option>
-              ))}
-            </select>
+          <div className="selected-labels">
+            {newTask.labels.length > 0
+              ? newTask.labels.map((id) => {
+                  const label = labels.find((l) => l.id === id);
+                  if (!label) return null;
+                  return (
+                    <span key={id} className="label-pill">
+                      {label.name}
+                      <button
+                        type="button"
+                        className="remove-label-btn"
+                        onClick={() =>
+                          setNewTask((prev) => ({
+                            ...prev,
+                            labels: prev.labels.filter((lId) => lId !== id),
+                          }))
+                        }
+                      >
+                        ×
+                      </button>
+                    </span>
+                  );
+                })
+              : "No labels"}
           </div>
+        </div>
 
-          <div className="labels">
-            <label htmlFor="labels__drop" className="labels__label">
-              Label
-            </label>
-            <select className="labels__drop" name="labels" id="labels__drop" multiple value={newTask.labels} onChange={handleLabelsChange}>
-              <option value="">Hold CTRL to select multiple</option>
-              {labels.map((label) => (
-                <option key={label.id} value={label.id}>
-                  {label.name || label.id}
-                </option>
-              ))}
-            </select>
-          </div>
+        {error && <div className="error-message">{error}</div>}
 
-          <div className="buttons">
-            <button className="add-task-btn btn" type="submit" disabled={submitting}>
-              Add
-            </button>
-            <button className="btn" type="button" onClick={onClose} style={{ marginLeft: 8 }}>
-              Close
-            </button>
-          </div>
-          {error && <div style={{ color: "red" }}>{error}</div>}
-        </form>
-      </section>
-    </>
+        <div className="buttons">
+          <button className="btn btn-primary" type="submit" disabled={submitting}>
+            Add Task
+          </button>
+          <button className="btn btn-secondary" type="button" onClick={onClose}>
+            Close
+          </button>
+        </div>
+      </form>
+    </section>
   );
 }
 

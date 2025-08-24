@@ -1,20 +1,29 @@
 import React, { useEffect, useState } from "react";
 import Pagination from "./Pagination";
+import TopBar from "./TopBar";
+import AddTask from "./AddTask";
 import "./css/Backlog.css";
 
 const PaginatedBacklog = ({ projectId }) => {
-  const [tasks, setTasks] = useState([]);
   const [projects, setProjects] = useState([]);
+  const [backlogTasks, setBacklogTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
   const [pagination, setPagination] = useState({
     page: 1,
     pageSize: 10,
     total: 0,
   });
 
+  const [searchInput, setSearchInput] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searched, setSearched] = useState(false);
+
+  const [showAddTask, setShowAddTask] = useState(false);
+
   useEffect(() => {
-    const fetchTasks = async (page) => {
+    const fetchProjects = async (page) => {
       try {
         setLoading(true);
         const res = await fetch(
@@ -42,38 +51,57 @@ const PaginatedBacklog = ({ projectId }) => {
       }
     };
 
-    fetchTasks(pagination.page);
+    fetchProjects(pagination.page);
   }, [pagination.page, pagination.pageSize]);
 
   const handlePageChange = (newPage) => {
     setPagination((prev) => ({ ...prev, page: newPage }));
   };
 
+  // build backlogTasks whenever projects or projectId changes
   useEffect(() => {
-    const backlogTasks = [];
+    if (!projects.length) return;
+
+    const newBacklogTasks = [];
 
     projects.forEach((project) => {
-      // Strapi: taken zitten meestal in project.attributes.tasks.data
-      const projectTasks = project?.tasks || [];
-      const filteredTasks = projectTasks.filter((task) => task?.taskStatus?.name === "Backlog");
+      const projectTasks = project?.tasks || project?.attributes?.tasks?.data || [];
 
-      if (!projectId || project?.name?.toLowerCase() === projectId.toLowerCase()) {
-        backlogTasks.push(
-          ...filteredTasks.map((task) => ({
-            // Strapi: id en title zitten in task.id en task.attributes.title
-            id: task.id,
-            title: task.title || task.attributes.title,
-            documentId: task.documentId || task.attributes.documentId,
-            project: {
-              name: project.name || project.attributes.name,
-            },
-          }))
-        );
-      }
+      projectTasks.forEach((task) => {
+        if (task?.taskStatus?.name === "Backlog") {
+          if (!projectId || project?.documentId === projectId || project?.attributes?.documentId === projectId) {
+            newBacklogTasks.push({
+              id: task.id,
+              title: task.title || task.attributes?.title,
+              documentId: task.documentId || task.attributes?.documentId,
+              project: {
+                name: project.name || project.attributes?.name,
+              },
+            });
+          }
+        }
+      });
     });
 
-    setTasks(backlogTasks);
+    setBacklogTasks(newBacklogTasks);
   }, [projects, projectId]);
+
+  const handleSearch = () => {
+    if (!searched) {
+      setSearchTerm(searchInput);
+      setSearched(true);
+    } else {
+      setSearchInput("");
+      setSearchTerm("");
+      setSearched(false);
+    }
+  };
+
+  const filteredTasks = backlogTasks.filter((task) => task.title.toLowerCase().includes(searchTerm.toLowerCase()));
+
+  const handleTaskAdded = (createdTask) => {
+    setBacklogTasks((prev) => [createdTask, ...prev]);
+  };
 
   if (loading) {
     return <div>Loading tasks...</div>;
@@ -87,7 +115,15 @@ const PaginatedBacklog = ({ projectId }) => {
     <div className="backlog-container">
       <h2 className="backlog-header">Backlog Tasks</h2>
 
-      {tasks.length === 0 ? (
+      <TopBar
+        searchInput={searchInput}
+        setSearchInput={setSearchInput}
+        searched={searched}
+        handleSearch={handleSearch}
+        onAddTask={() => setShowAddTask(true)}
+      />
+
+      {filteredTasks.length === 0 ? (
         <p className="no-tasks-message">No backlog tasks found.</p>
       ) : (
         <table className="backlog-table">
@@ -98,7 +134,7 @@ const PaginatedBacklog = ({ projectId }) => {
             </tr>
           </thead>
           <tbody>
-            {tasks.map((task) => (
+            {filteredTasks.map((task) => (
               <tr
                 key={task.id}
                 className="task-row"
@@ -114,6 +150,8 @@ const PaginatedBacklog = ({ projectId }) => {
       )}
 
       <Pagination page={pagination.page} totalPages={Math.ceil(pagination.total / pagination.pageSize)} onPageChange={handlePageChange} />
+
+      <AddTask show={showAddTask} onClose={() => setShowAddTask(false)} onTaskAdded={handleTaskAdded} />
     </div>
   );
 };
