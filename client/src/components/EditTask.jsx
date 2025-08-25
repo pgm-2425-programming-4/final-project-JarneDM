@@ -30,7 +30,7 @@ function EditTask() {
     const fetchTask = async () => {
       try {
         setLoading(true);
-        const res = await fetch(`http://localhost:1337/api/tasks?filters[documentId]=${taskId}&populate=*`);
+        const res = await fetch(`https://final-project-jarnedm.onrender.com//api/tasks?filters[documentId]=${taskId}&populate=*`);
         const data = await res.json();
 
         if (data.data && data.data.length > 0) {
@@ -59,9 +59,9 @@ function EditTask() {
       try {
         setDropdownLoading(true);
         const [statusesRes, projectsRes, labelsRes] = await Promise.all([
-          fetch("http://localhost:1337/api/statuses"),
-          fetch("http://localhost:1337/api/projects"),
-          fetch("http://localhost:1337/api/labels"),
+          fetch("https://final-project-jarnedm.onrender.com//api/statuses"),
+          fetch("https://final-project-jarnedm.onrender.com//api/projects"),
+          fetch("https://final-project-jarnedm.onrender.com//api/labels"),
         ]);
         const [statusesData, projectsData, labelsData] = await Promise.all([statusesRes.json(), projectsRes.json(), labelsRes.json()]);
         setStatuses(statusesData.data || []);
@@ -92,7 +92,7 @@ function EditTask() {
         },
       };
 
-      const res = await fetch(`http://localhost:1337/api/tasks/${task.documentId}`, {
+      const res = await fetch(`https://final-project-jarnedm.onrender.com//api/tasks/${task.documentId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
@@ -117,7 +117,7 @@ function EditTask() {
 
   const handleDelete = async () => {
     try {
-      const res = await fetch(`http://localhost:1337/api/tasks/${deleteTask.documentId}`, { method: "DELETE" });
+      const res = await fetch(`https://final-project-jarnedm.onrender.com//api/tasks/${deleteTask.documentId}`, { method: "DELETE" });
       if (!res.ok) {
         const errData = await res.json();
         throw new Error(errData.error?.message || "Failed to delete task");
@@ -133,7 +133,7 @@ function EditTask() {
 
   const handleDeleteLabel = async (labelId) => {
     try {
-      const res = await fetch(`http://localhost:1337/api/labels/${labelId}`, { method: "DELETE" });
+      const res = await fetch(`https://final-project-jarnedm.onrender.com//api/labels/${labelId}`, { method: "DELETE" });
       if (!res.ok) {
         const errData = await res.json();
         throw new Error(errData.error?.message || "Failed to delete label");
@@ -150,7 +150,7 @@ function EditTask() {
   const handleAddLabel = async () => {
     if (!newLabelName.trim()) return;
     try {
-      const res = await fetch("http://localhost:1337/api/labels", {
+      const res = await fetch("https://final-project-jarnedm.onrender.com//api/labels", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ data: { name: newLabelName } }),

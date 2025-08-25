@@ -11,7 +11,7 @@ function StatusCard({ selectedProject, tasks }) {
     const fetchStatuses = async () => {
       try {
         setLoading(true);
-        const statRes = await fetch("http://localhost:1337/api/statuses");
+        const statRes = await fetch("https://final-project-jarnedm.onrender.com//api/statuses");
         const statData = await statRes.json();
         if (statData?.data) {
           setStatuses(statData.data);

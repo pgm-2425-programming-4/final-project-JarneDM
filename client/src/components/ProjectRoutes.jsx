@@ -15,7 +15,7 @@ export function ProjectBoard() {
   useEffect(() => {
     const fetchProject = async () => {
       try {
-        const res = await fetch(`http://localhost:1337/api/projects/${id}?populate=*`);
+        const res = await fetch(`https://final-project-jarnedm.onrender.com//api/projects/${id}?populate=*`);
         const data = await res.json();
         if (data.data) {
           // Unwrap attributes for easier access
@@ -40,7 +40,7 @@ export function ProjectBoard() {
       try {
         // Correct Strapi filter for project
         const res = await fetch(
-          `http://localhost:1337/api/tasks?populate=*&filters[project][documentId][$eq]=${selectedProject.documentId}`
+          `https://final-project-jarnedm.onrender.com//api/tasks?populate=*&filters[project][documentId][$eq]=${selectedProject.documentId}`
         );
         const data = await res.json();
         setTasks(data.data);

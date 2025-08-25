@@ -20,9 +20,9 @@ function AddTask({ show, onClose, onTaskAdded, fetchTasks }) {
     const fetchDropdownData = async () => {
       try {
         const [statusesRes, projectsRes, labelsRes] = await Promise.all([
-          fetch("http://localhost:1337/api/statuses"),
-          fetch("http://localhost:1337/api/projects"),
-          fetch("http://localhost:1337/api/labels"),
+          fetch("https://final-project-jarnedm.onrender.com//api/statuses"),
+          fetch("https://final-project-jarnedm.onrender.com//api/projects"),
+          fetch("https://final-project-jarnedm.onrender.com//api/labels"),
         ]);
         const [statusesData, projectsData, labelsData] = await Promise.all([statusesRes.json(), projectsRes.json(), labelsRes.json()]);
         setStatuses(statusesData?.data || []);
@@ -61,7 +61,7 @@ function AddTask({ show, onClose, onTaskAdded, fetchTasks }) {
         labels: newTask.labels.map((id) => ({ id: Number(id) })),
       };
 
-      const response = await fetch("http://localhost:1337/api/tasks?populate=*", {
+      const response = await fetch("https://final-project-jarnedm.onrender.com//api/tasks?populate=*", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ data: payload }),
