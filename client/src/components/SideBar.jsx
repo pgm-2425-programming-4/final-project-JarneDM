@@ -2,9 +2,10 @@ import React, { useEffect, useState, useCallback } from "react";
 import "./css/Projects.css";
 import "./css/TopBar.css";
 import "./css/overlay.css";
+import "./css/addTask.css";
 import AddProject from "./AddProject";
 import penIcon from "../assets/pen.png";
-import closeImage from "../assets/close.png";
+// import closeImage from "../assets/close.png";
 import deleteImage from "..//assets/bin.png";
 
 function SideBar({ onAddLabel }) {
@@ -162,31 +163,31 @@ function SideBar({ onAddLabel }) {
         </div>
 
         {editingProject && (
-          <div className="edit-project">
-            <img
-              className="close-icon"
-              src={closeImage}
-              alt="Close edit project"
-              style={{ cursor: "pointer" }}
-              onClick={() => setEditingProject(null)}
-            />
+          <div className="overlay-pop-up edit-project">
             <label htmlFor="edit-project-name">Project Name</label>
             <input
+              className="input-field"
               id="edit-project-name"
               name="edit-project-name"
               type="text"
               value={newProjectName}
               onChange={(e) => setNewProjectName(e.target.value)}
             />
-            <button
-              onClick={(e) => {
-                handleEditProject(e);
-                setEditingProject(null);
-              }}
-              type="submit"
-            >
-              Edit
-            </button>
+            <div className="buttons">
+              <button
+                onClick={(e) => {
+                  handleEditProject(e);
+                  setEditingProject(null);
+                }}
+                type="submit"
+                className="btn btn-primary"
+              >
+                Edit
+              </button>
+              <button className="btn-secondary btn" onClick={() => setEditingProject(null)}>
+                Cancel
+              </button>
+            </div>
           </div>
         )}
 
