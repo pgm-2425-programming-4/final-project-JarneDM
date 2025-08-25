@@ -19,7 +19,7 @@ function SideBar({ onAddLabel }) {
 
   const fetchProjects = useCallback(async () => {
     try {
-      const res = await fetch(`https://final-project-jarnedm.onrender.com//api/projects`);
+      const res = await fetch(`https://final-project-jarnedm.onrender.com/api/projects`);
       if (!res.ok) throw new Error("Failed to fetch projects");
 
       const data = await res.json();
@@ -44,7 +44,7 @@ function SideBar({ onAddLabel }) {
     if (!editingProject) return;
 
     try {
-      const getRes = await fetch(`https://final-project-jarnedm.onrender.com//api/projects/${editingProject.documentId}?populate=*`);
+      const getRes = await fetch(`https://final-project-jarnedm.onrender.com/api/projects/${editingProject.documentId}?populate=*`);
       if (!getRes.ok) {
         throw new Error("Failed to fetch current project data");
       }
@@ -65,7 +65,7 @@ function SideBar({ onAddLabel }) {
 
       console.log("PUT request body:", body);
 
-      const res = await fetch(`https://final-project-jarnedm.onrender.com//api/projects/${editingProject.documentId}`, {
+      const res = await fetch(`https://final-project-jarnedm.onrender.com/api/projects/${editingProject.documentId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -91,7 +91,7 @@ function SideBar({ onAddLabel }) {
 
   const handleDelete = async () => {
     try {
-      const res = await fetch(`https://final-project-jarnedm.onrender.com//api/projects/${deleteProject.documentId}`, {
+      const res = await fetch(`https://final-project-jarnedm.onrender.com/api/projects/${deleteProject.documentId}`, {
         method: "DELETE",
       });
 

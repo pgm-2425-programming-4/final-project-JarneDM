@@ -9,7 +9,7 @@ function Status() {
     const fetchStatuses = async () => {
       try {
         setLoading(true);
-        const res = await fetch(`https://final-project-jarnedm.onrender.com//api/statuses`);
+        const res = await fetch(`https://final-project-jarnedm.onrender.com/api/statuses`);
         const data = await res.json();
 
         if (data?.data) {

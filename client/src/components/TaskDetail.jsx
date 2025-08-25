@@ -12,7 +12,7 @@ function TaskDetail() {
   useEffect(() => {
     const fetchTask = async () => {
       try {
-        const res = await fetch(`https://final-project-jarnedm.onrender.com//api/tasks?filters[documentId]=${taskId}&populate=*`);
+        const res = await fetch(`https://final-project-jarnedm.onrender.com/api/tasks?filters[documentId]=${taskId}&populate=*`);
         const data = await res.json();
 
         if (data.data && data.data.length > 0) {

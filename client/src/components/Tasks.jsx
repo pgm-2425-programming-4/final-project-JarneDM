@@ -17,7 +17,7 @@ function Tasks({ selectedProject, setTasks, tasks }) {
 
   const buildTasksUrl = useCallback(() => {
     if (!selectedProject) return "";
-    return `https://final-project-jarnedm.onrender.com//api/tasks?populate=*&filters[project][documentId][$eq]=${selectedProject.documentId}`;
+    return `https://final-project-jarnedm.onrender.com/api/tasks?populate=*&filters[project][documentId][$eq]=${selectedProject.documentId}`;
   }, [selectedProject]);
 
   const fetchTasks = useCallback(async () => {

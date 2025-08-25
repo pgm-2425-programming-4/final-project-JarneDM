@@ -11,7 +11,7 @@ function AddLabel({ show, onClose }) {
     setSubmitting(true);
     setError(null);
     try {
-      const response = await fetch("https://final-project-jarnedm.onrender.com//api/labels", {
+      const response = await fetch("https://final-project-jarnedm.onrender.com/api/labels", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ data: { name } }),

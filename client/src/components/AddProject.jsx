@@ -11,7 +11,7 @@ function AddProject({ show, onClose, onProjectAdded }) {
     setSubmitting(true);
     setError(null);
     try {
-      const response = await fetch("https://final-project-jarnedm.onrender.com//api/projects", {
+      const response = await fetch("https://final-project-jarnedm.onrender.com/api/projects", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ data: { name } }),

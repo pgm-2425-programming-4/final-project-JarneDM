@@ -27,7 +27,7 @@ const PaginatedBacklog = ({ projectId }) => {
       try {
         setLoading(true);
         const res = await fetch(
-          `https://final-project-jarnedm.onrender.com//api/projects?populate[tasks][populate]=taskStatus&pagination[page]=${page}&pagination[pageSize]=${pagination.pageSize}`
+          `https://final-project-jarnedm.onrender.com/api/projects?populate[tasks][populate]=taskStatus&pagination[page]=${page}&pagination[pageSize]=${pagination.pageSize}`
         );
 
         const data = await res.json();
